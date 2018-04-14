@@ -9,29 +9,12 @@ const Utils = {
       el.classList.remove(className);
     }
   },
-  // 将伪数组转化为数组
-  transferToArray(obj) {
-    return Array.prototype.slice.call(obj);
-  },
   // 截流函数
   throttle(method, context, event, time) {
     clearTimeout(method.tId);
     method.tId = setTimeout(function() {
       method.call(context, event);
     }, time);
-  },
-  // 获取 viewport 尺寸
-  getViewportDimension() {
-    if (document.compatMode === 'BackCompat') {
-      return {
-        width: document.body.clientWidth,
-        height: document.body.clientHeight,
-      };
-    }
-    return {
-      width: document.documentElement.clientWidth,
-      height: document.documentElement.clientHeight,
-    };
   },
   /**
    * 兼容事件 begin
@@ -51,44 +34,6 @@ const Utils = {
       this.addHandler = function(element, type, handler) {
         element.attachEvent(`on${type}`, handler);
       };
-    } else {
-      element[`on${type}`] = handler;
-
-      this.addHandler = function(element, type, handler) {
-        element[`on${type}`] = handler;
-      };
-    }
-  },
-  removeHandler(element, type, handler) {
-    if (element.removeEventListener) {
-      element.removeEventListener(type, handler, false);
-
-      this.removeHandler = function(element, type, handler) {
-        element.removeEventListener(type, handler, false);
-      };
-    } else if (element.detachEvent) {
-      element.detachEvent(`on${type}`, handler);
-
-      this.removeHandler = function(element, type, handler) {
-        element.detachEvent(`on${type}`, handler);
-      };
-    } else {
-      element[`on${type}`] = null;
-      this.removeHandler = function(element, type, handler) {
-        element[`on${type}`] = null;
-      };
-    }
-  },
-  getEvent(event) {
-    if (event) {
-      // 第一次调用之后惰性载入
-      this.getEvent = event => event;
-
-      // 第一次调用使用
-      return event;
-    } else {
-      this.getEvent = () => window.event;
-      return window.event;
     }
   },
   // 鼠标滚轮事件
@@ -100,8 +45,9 @@ const Utils = {
       // 第一次调用使用
       return event.wheelDelta;
     } else {
-      this.getWheelDelta = event => -event.detail * 40;
-      return -event.detail * 40;
+      // 兼容火狐
+      this.getWheelDelta = event => -event.detail;
+      return -event.detail;
     }
   },
 };
@@ -118,11 +64,26 @@ class PureFullPage {
     // 初始化右侧点导航，以备后用
     this.navDots = [];
     // 获取当前视图高度
-    this.viewHeight = Utils.getViewportDimension().height;
+    this.viewHeight = document.documentElement.clientHeight;
     // 当前位置，负值表示相对视图窗口顶部向下的偏移量
     this.currentPosition = 0;
     // 截流函数间隔时间，毫秒
     this.throttleTime = 150;
+  }
+  // window resize 时重新获取位置
+  getNewPosition() {
+    this.viewHeight = document.documentElement.clientHeight;
+    let activeNavIndex;
+    this.navDots.forEach((e, i) => {
+      if (e.classList.contains('active')) {
+        activeNavIndex = i;
+      }
+    });
+    this.currentPosition = -(activeNavIndex * this.viewHeight);
+    this.turnPage(this.currentPosition);
+  }
+  handleWindowResize(event) {
+    Utils.throttle(this.getNewPosition, this, event, this.throttleTime);
   }
   // 页面跳转
   turnPage(height) {
@@ -171,7 +132,6 @@ class PureFullPage {
   }
   // 鼠标滚动逻辑（全屏滚动关键逻辑）
   scrollMouse(event) {
-    event = Utils.getEvent(event);
     let delta = Utils.getWheelDelta(event);
 
     // 向下滚动，delta < 表示向下滚动，且只有页面底部还有内容时才能滚动
@@ -214,13 +174,21 @@ class PureFullPage {
   init() {
     // 创建点式导航
     this.createNav();
-
-    // 鼠标滚轮监听，注意绑定 this
-    Utils.addHandler(document, 'mousewheel', this.handleMouseWheel.bind(this));
-    Utils.addHandler(
-      document,
-      'DOMMouseScroll',
-      this.handleMouseWheel.bind(this),
-    );
+    // 鼠标滚轮监听，注意绑定 this，火狐鼠标滚动事件不同其他
+    if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
+      Utils.addHandler(
+        document,
+        'mousewheel',
+        this.handleMouseWheel.bind(this),
+      );
+    } else {
+      console.log(111);
+      Utils.addHandler(
+        document,
+        'DOMMouseScroll',
+        this.handleMouseWheel.bind(this),
+      );
+    }
+    Utils.addHandler(window, 'resize', this.handleWindowResize.bind(this));
   }
 }

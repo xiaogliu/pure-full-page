@@ -1,6 +1,5 @@
 /* 去除默认样式 */
-body,
-p {
+body {
   padding: 0;
   margin: 0;
 }
@@ -19,9 +18,6 @@ body {
 }
 
 .page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
   height: 100vh;
 }
@@ -58,6 +54,7 @@ body {
   height: 6px;
   background-color: #fff;
   border-radius: 50%;
+  box-shadow: 0 0 8px #fff;
   transition: all 100ms ease-in-out;
 }
 .nav p:hover span {
