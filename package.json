@@ -1,0 +1,29 @@
+{
+  "name": "pure_full_page",
+  "version": "1.0.0",
+  "description": "full page scroll developed by js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "gulp babel"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiaogliu/pure_full_page.git"
+  },
+  "author": "Liu Xiaoguang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xiaogliu/pure_full_page/issues"
+  },
+  "homepage": "https://github.com/xiaogliu/pure_full_page#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^3.0.0"
+  }
+}

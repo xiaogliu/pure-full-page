@@ -1,1 +1,0 @@
-new PureFullPage('#pureFullPage').init();

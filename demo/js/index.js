@@ -1,3 +1,2 @@
-import PureFullPage from './components/pureFullPage.js';
-
-new PureFullPage('#pureFullPage')._init();
+console.log(PureFullPage);
+new PureFullPage('#pureFullPage').init();
