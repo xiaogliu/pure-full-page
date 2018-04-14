@@ -1,2 +1,1 @@
-console.log(PureFullPage);
-new PureFullPage('#pureFullPage').init();
+new PureFullPage({ showNav: false }).init();

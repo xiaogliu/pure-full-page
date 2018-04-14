@@ -1,24 +1,8 @@
+/**
+ * Utils 为工具函数，对原生API做兼容性处理及提取公共方法
+ */
 const Utils = {
-  /**
-   * 工具函数
-   * 惰性载入函数降低了代码的可读性，如果不是频繁操作的项目，不引入惰性载入
-   */
-  // 删除 类名
-  deleteClassName(el, className) {
-    if (el.classList.contains(className)) {
-      el.classList.remove(className);
-    }
-  },
-  // 截流函数
-  throttle(method, context, event, time) {
-    clearTimeout(method.tId);
-    method.tId = setTimeout(function() {
-      method.call(context, event);
-    }, time);
-  },
-  /**
-   * 兼容事件 begin
-   */
+  // 添加事件
   addHandler(element, type, handler) {
     if (element.addEventListener) {
       // 第一次调用初始化
@@ -50,6 +34,45 @@ const Utils = {
       return -event.detail;
     }
   },
+  // polyfill Object.assign
+  polyfill() {
+    if (typeof Object.assign != 'function') {
+      Object.defineProperty(Object, 'assign', {
+        value: function assign(target, varArgs) {
+          if (target == null) {
+            throw new TypeError('Cannot convert undefined or null to object');
+          }
+          let to = Object(target);
+          for (let index = 1; index < arguments.length; index++) {
+            let nextSource = arguments[index];
+            if (nextSource != null) {
+              for (let nextKey in nextSource) {
+                if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+                  to[nextKey] = nextSource[nextKey];
+                }
+              }
+            }
+          }
+          return to;
+        },
+        writable: true,
+        configurable: true,
+      });
+    }
+  },
+  // 删除 类名
+  deleteClassName(el, className) {
+    if (el.classList.contains(className)) {
+      el.classList.remove(className);
+    }
+  },
+  // 截流函数
+  throttle(method, context, event, time) {
+    clearTimeout(method.tId);
+    method.tId = setTimeout(function() {
+      method.call(context, event);
+    }, time);
+  },
 };
 
 /**
@@ -62,6 +85,7 @@ class PureFullPage {
       el: '#pureFullPage',
       showNav: true,
     };
+    Utils.polyfill();
     // 合并自定义配置
     this.options = Object.assign(defaultOptions, options);
     // 获取翻页容器
