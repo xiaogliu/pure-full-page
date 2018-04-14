@@ -56,9 +56,16 @@ const Utils = {
  * 全屏滚动逻辑
  */
 class PureFullPage {
-  constructor(el) {
+  constructor(options) {
+    // 默认配置
+    const defaultOptions = {
+      el: '#pureFullPage',
+      showNav: true,
+    };
+    // 合并自定义配置
+    this.options = Object.assign(defaultOptions, options);
     // 获取翻页容器
-    this.main = document.querySelector(el);
+    this.main = document.querySelector(this.options.el);
     // 获取总页数，创建右侧点导航时用
     this.pagesNum = document.querySelectorAll('.page').length;
     // 初始化右侧点导航，以备后用
@@ -91,12 +98,14 @@ class PureFullPage {
   }
   // 随页面滚动改变样式
   changeNavStyle(height) {
-    this.navDots.forEach(el => {
-      Utils.deleteClassName(el, 'active');
-    });
+    if (this.options.showNav) {
+      this.navDots.forEach(el => {
+        Utils.deleteClassName(el, 'active');
+      });
 
-    let i = -(height / this.viewHeight);
-    this.navDots[i].classList.add('active');
+      let i = -(height / this.viewHeight);
+      this.navDots[i].classList.add('active');
+    }
   }
   // 创建右侧点式导航
   createNav() {
@@ -173,7 +182,9 @@ class PureFullPage {
   // 初始化函数
   init() {
     // 创建点式导航
-    this.createNav();
+    if (this.options.showNav) {
+      this.createNav();
+    }
     // 鼠标滚轮监听，注意绑定 this，火狐鼠标滚动事件不同其他
     if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
       Utils.addHandler(
@@ -189,6 +200,7 @@ class PureFullPage {
         this.handleMouseWheel.bind(this),
       );
     }
+    // 窗口尺寸变化时重置位置
     Utils.addHandler(window, 'resize', this.handleWindowResize.bind(this));
   }
 }

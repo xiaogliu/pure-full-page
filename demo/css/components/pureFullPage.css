@@ -1,6 +1,5 @@
 /* 去除默认样式 */
-body,
-p {
+body {
   padding: 0;
   margin: 0;
 }
@@ -19,9 +18,6 @@ body {
 }
 
 .page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
   height: 100vh;
 }
@@ -38,7 +34,7 @@ body {
 .nav {
   position: fixed;
   top: 50%;
-  right: 15px;
+  right: 2%;
   width: 15px;
   transform: translateY(-50%);
 }
@@ -48,7 +44,7 @@ body {
   align-items: center;
   width: 12px;
   height: 12px;
-  padding: 10px 5px;
+  padding: 14px 5px;
   margin: 0 auto;
   cursor: pointer;
 }
@@ -56,15 +52,18 @@ body {
   display: block;
   width: 6px;
   height: 6px;
-  background-color: #fff;
-  border-radius: 50%;
-  transition: all 100ms ease-in-out;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 6px;
+  box-shadow: 0 0 8px #fff;
+  transition: all 150ms ease-in-out;
 }
 .nav p:hover span {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 16px;
+  background-color: #fff;
 }
 .nav p.active span {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 20px;
+  background-color: #fff;
 }
