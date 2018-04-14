@@ -51,10 +51,9 @@ body {
 .nav p span {
   display: block;
   width: 6px;
-  height: 6px;
+  height: 12px;
   background-color: rgba(255, 255, 255, 0.6);
-  border-radius: 6px;
-  box-shadow: 0 0 8px #fff;
+  border-radius: 12px;
   transition: all 150ms ease-in-out;
 }
 .nav p:hover span {
