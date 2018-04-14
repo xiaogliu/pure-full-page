@@ -1,1 +1,1 @@
-new PureFullPage({ showNav: false }).init();
+new PureFullPage().init();
