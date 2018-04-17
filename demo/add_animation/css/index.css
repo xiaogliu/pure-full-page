@@ -1,0 +1,22 @@
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.page p {
+  opacity: 0;
+  font-size: 66px;
+}
+.page p.fade-in {
+  animation: fadeIn 1s ease-in-out;
+  opacity: 1;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
