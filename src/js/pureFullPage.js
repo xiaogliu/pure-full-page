@@ -12,10 +12,6 @@ class PureFullPage {
     Utils.polyfill();
     // 合并自定义配置
     this.options = Object.assign(defaultOptions, options);
-    // 将回调函数中的 this 绑定到 PureFullPage
-    if (this.options.definePages) {
-      this.options.definePages = this.options.definePages.bind(this);
-    }
     // 获取翻页容器
     this.main = document.querySelector(this.options.container);
     // 获取页面及总页数，创建右侧点导航时用
@@ -114,7 +110,11 @@ class PureFullPage {
 
       this.turnPage(this.currentPosition);
       this.changeNavStyle(this.currentPosition);
-      this.options.definePages(this.currentPosition);
+
+      // 处理用户自定义函数
+      if (this.options.definePages) {
+        this.options.definePages(this.currentPosition);
+      }
     }
 
     // 向上滚动，delta > 0，且页面顶部还有内容时才能滚动
@@ -129,7 +129,10 @@ class PureFullPage {
 
       this.turnPage(this.currentPosition);
       this.changeNavStyle(this.currentPosition);
-      this.options.definePages(this.currentPosition);
+      // 处理用户自定义函数
+      if (this.options.definePages) {
+        this.options.definePages(this.currentPosition);
+      }
     }
   }
   // 设置截流函数，注意绑定 this
