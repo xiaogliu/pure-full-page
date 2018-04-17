@@ -5,16 +5,24 @@ class PureFullPage {
   constructor(options) {
     // 默认配置
     const defaultOptions = {
-      el: '#pureFullPage',
-      showNav: true,
+      container: '#pureFullPage',
+      isShowNav: true,
+      definePages: null,
     };
     Utils.polyfill();
     // 合并自定义配置
     this.options = Object.assign(defaultOptions, options);
+    // 将回调函数中的 this 绑定到 PureFullPage
+    if (this.options.definePages) {
+      this.options.definePages = this.options.definePages.bind(this);
+    }
     // 获取翻页容器
-    this.main = document.querySelector(this.options.el);
-    // 获取总页数，创建右侧点导航时用
-    this.pagesNum = document.querySelectorAll('.page').length;
+    this.main = document.querySelector(this.options.container);
+    // 获取页面及总页数，创建右侧点导航时用
+    this.pages = document.querySelectorAll('.page');
+    this.pages = Array.prototype.slice.call(this.pages);
+    this.pagesNum = this.pages.length;
+
     // 初始化右侧点导航，以备后用
     this.navDots = [];
     // 获取当前视图高度
@@ -22,7 +30,7 @@ class PureFullPage {
     // 当前位置，负值表示相对视图窗口顶部向下的偏移量
     this.currentPosition = 0;
     // 截流函数间隔时间，毫秒
-    this.throttleTime = 150;
+    this.THROTTLE_TIME = 150;
   }
   // window resize 时重新获取位置
   getNewPosition() {
@@ -37,7 +45,7 @@ class PureFullPage {
     this.turnPage(this.currentPosition);
   }
   handleWindowResize(event) {
-    Utils.throttle(this.getNewPosition, this, event, this.throttleTime);
+    Utils.throttle(this.getNewPosition, this, event, this.THROTTLE_TIME);
   }
   // 页面跳转
   turnPage(height) {
@@ -45,7 +53,7 @@ class PureFullPage {
   }
   // 随页面滚动改变样式
   changeNavStyle(height) {
-    if (this.options.showNav) {
+    if (this.options.isShowNav) {
       this.navDots.forEach(el => {
         Utils.deleteClassName(el, 'active');
       });
@@ -106,6 +114,7 @@ class PureFullPage {
 
       this.turnPage(this.currentPosition);
       this.changeNavStyle(this.currentPosition);
+      this.options.definePages(this.currentPosition);
     }
 
     // 向上滚动，delta > 0，且页面顶部还有内容时才能滚动
@@ -120,16 +129,17 @@ class PureFullPage {
 
       this.turnPage(this.currentPosition);
       this.changeNavStyle(this.currentPosition);
+      this.options.definePages(this.currentPosition);
     }
   }
   // 设置截流函数，注意绑定 this
   handleMouseWheel(event) {
-    Utils.throttle(this.scrollMouse, this, event, this.throttleTime);
+    Utils.throttle(this.scrollMouse, this, event, this.THROTTLE_TIME);
   }
   // 初始化函数
   init() {
     // 创建点式导航
-    if (this.options.showNav) {
+    if (this.options.isShowNav) {
       this.createNav();
     }
     // 鼠标滚轮监听，注意绑定 this，火狐鼠标滚动事件不同其他
