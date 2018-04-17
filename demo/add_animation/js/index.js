@@ -1,7 +1,7 @@
 /**
  * 添加交互动画
  */
-let addAnimation = function(currentPosition) {
+let addAnimation = currentPosition => {
   let pages = document.querySelectorAll('.page');
   pages = Array.prototype.slice.call(pages);
   const viewHeight = document.documentElement.clientHeight;
