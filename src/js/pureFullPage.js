@@ -24,6 +24,34 @@ class PureFullPage {
     this.currentPosition = 0;
     // 截流/截流函数间隔时间，毫秒
     this.DELAY = 50;
+    // 手机坐标
+    this.startX = undefined;
+    this.startY = undefined;
+  }
+  // 获取手机角度
+  getAngle(angX, angY) {
+    return Math.atan2(angY, angX) * 180 / Math.PI;
+  }
+  // 根据起点终点返回方向 1向上 2向下
+  getDirection(startX, startY, endX, endY) {
+    let angX = endX - startX;
+    let angY = endY - startY;
+    let result = 0;
+
+    //如果滑动距离太短
+    if (Math.abs(angX) < 2 && Math.abs(angY) < 2) {
+      return result;
+    }
+
+    let angle = this.getAngle(angX, angY);
+
+    if (angle >= -135 && angle <= -45) {
+      result = 1;
+    } else if (angle > 45 && angle < 135) {
+      result = 2;
+    }
+
+    return result;
   }
   // window resize 时重新获取位置
   getNewPosition() {
@@ -89,6 +117,36 @@ class PureFullPage {
       });
     });
   }
+  goUp() {
+    // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越大表示超出顶部部分越少
+    this.currentPosition = this.currentPosition + this.viewHeight;
+
+    // 当 currentPosition = 0 时，表示第一个页面的顶部与视图顶部处在相同位置，此时不允许继续向上滚动
+    if (this.currentPosition > 0) {
+      this.currentPosition = 0;
+    }
+
+    this.turnPage(this.currentPosition);
+    this.changeNavStyle(this.currentPosition);
+    // 处理用户自定义函数
+    this.options.definePages(this.currentPosition);
+  }
+  goDown() {
+    // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越小表示超出顶部部分越多
+    this.currentPosition = this.currentPosition - this.viewHeight;
+
+    // 当 currentPosition =  -(this.viewHeight * (this.pagesNum - 1) 时，表示最后一个页面的顶部与视图顶部处在相同位置
+    // 此时不允许继续向上滚动
+    if (this.currentPosition < -(this.viewHeight * (this.pagesNum - 1))) {
+      this.currentPosition = -(this.viewHeight * (this.pagesNum - 1));
+    }
+
+    this.turnPage(this.currentPosition);
+    this.changeNavStyle(this.currentPosition);
+
+    // 处理用户自定义函数
+    this.options.definePages(this.currentPosition);
+  }
   // 鼠标滚动逻辑（全屏滚动关键逻辑）
   scrollMouse(event) {
     let delta = Utils.getWheelDelta(event);
@@ -98,36 +156,12 @@ class PureFullPage {
       delta < 0 &&
       this.main.offsetTop > -(this.viewHeight * (this.pagesNum - 1))
     ) {
-      // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越小表示超出顶部部分越多
-      this.currentPosition = this.currentPosition - this.viewHeight;
-
-      // 当 currentPosition =  -(this.viewHeight * (this.pagesNum - 1) 时，表示最后一个页面的顶部与视图顶部处在相同位置
-      // 此时不允许继续向上滚动
-      if (this.currentPosition < -(this.viewHeight * (this.pagesNum - 1))) {
-        this.currentPosition = -(this.viewHeight * (this.pagesNum - 1));
-      }
-
-      this.turnPage(this.currentPosition);
-      this.changeNavStyle(this.currentPosition);
-
-      // 处理用户自定义函数
-      this.options.definePages(this.currentPosition);
+      this.goDown();
     }
 
     // 向上滚动，delta > 0，且页面顶部还有内容时才能滚动
     if (delta > 0 && this.main.offsetTop < 0) {
-      // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越大表示超出顶部部分越少
-      this.currentPosition = this.currentPosition + this.viewHeight;
-
-      // 当 currentPosition = 0 时，表示第一个页面的顶部与视图顶部处在相同位置，此时不允许继续向上滚动
-      if (this.currentPosition > 0) {
-        this.currentPosition = 0;
-      }
-
-      this.turnPage(this.currentPosition);
-      this.changeNavStyle(this.currentPosition);
-      // 处理用户自定义函数
-      this.options.definePages(this.currentPosition);
+      this.goUp();
     }
   }
   // 初始化函数
@@ -150,6 +184,32 @@ class PureFullPage {
     } else {
       Utils.addHandler(document, 'DOMMouseScroll', handleMouseWheel);
     }
+
+    // 手指接触屏幕
+    Utils.addHandler(document, 'touchstart', e => {
+      this.startX = e.touches[0].pageX;
+      this.startY = e.touches[0].pageY;
+    });
+    //手指离开屏幕
+    Utils.addHandler(document, 'touchend', e => {
+      let endX, endY;
+      endX = e.changedTouches[0].pageX;
+      endY = e.changedTouches[0].pageY;
+      let direction = this.getDirection(this.startX, this.startY, endX, endY);
+      switch (direction) {
+        case 1:
+          // 手指向上滑动，对应页面向下滚动
+          this.goDown();
+          break;
+        case 2:
+          // 手指向下滑动，对应页面向上滚动
+          // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越大表示超出顶部部分越少
+          this.goUp();
+          break;
+        default:
+      }
+    });
+
     // 窗口尺寸变化时重置位置
     Utils.addHandler(window, 'resize', this.handleWindowResize.bind(this));
   }
