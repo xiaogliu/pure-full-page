@@ -22,8 +22,8 @@ class PureFullPage {
     this.viewHeight = document.documentElement.clientHeight;
     // 当前位置，负值表示相对视图窗口顶部向下的偏移量
     this.currentPosition = 0;
-    // 截流函数间隔时间，毫秒
-    this.THROTTLE_TIME = 150;
+    // 截流/截流函数间隔时间，毫秒
+    this.DELAY = 50;
   }
   // window resize 时重新获取位置
   getNewPosition() {
@@ -38,7 +38,7 @@ class PureFullPage {
     this.turnPage(this.currentPosition);
   }
   handleWindowResize(event) {
-    Utils.throttle(this.getNewPosition, this, event, this.THROTTLE_TIME);
+    Utils.throttle(this.getNewPosition, this, event, this.DELAY);
   }
   // 页面跳转
   turnPage(height) {
@@ -77,6 +77,8 @@ class PureFullPage {
       Utils.addHandler(el, 'click', () => {
         // 页面跳转
         this.currentPosition = -(i * this.viewHeight);
+        // 处理用户自定义函数
+        this.options.definePages(this.currentPosition);
         this.turnPage(this.currentPosition);
 
         // 更改样式
@@ -128,30 +130,25 @@ class PureFullPage {
       this.options.definePages(this.currentPosition);
     }
   }
-  // 设置截流函数，注意绑定 this
-  handleMouseWheel(event) {
-    Utils.throttle(this.scrollMouse, this, event, this.THROTTLE_TIME);
-  }
   // 初始化函数
   init() {
     // 创建点式导航
     if (this.options.isShowNav) {
       this.createNav();
     }
-    // 鼠标滚轮监听，注意绑定 this，火狐鼠标滚动事件不同其他
+    // 设置间隔函数
+    let handleMouseWheel = Utils.debounce(
+      this.scrollMouse,
+      this,
+      this.DELAY,
+      true,
+    );
+
+    // 鼠标滚轮监听，火狐鼠标滚动事件不同其他
     if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
-      Utils.addHandler(
-        document,
-        'mousewheel',
-        this.handleMouseWheel.bind(this),
-      );
+      Utils.addHandler(document, 'mousewheel', handleMouseWheel);
     } else {
-      console.log(111);
-      Utils.addHandler(
-        document,
-        'DOMMouseScroll',
-        this.handleMouseWheel.bind(this),
-      );
+      Utils.addHandler(document, 'DOMMouseScroll', handleMouseWheel);
     }
     // 窗口尺寸变化时重置位置
     Utils.addHandler(window, 'resize', this.handleWindowResize.bind(this));

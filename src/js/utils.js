@@ -35,11 +35,29 @@ const Utils = {
     }
   },
   // 截流函数
-  throttle(method, context, event, time) {
+  throttle(method, context, event, delay) {
     clearTimeout(method.tId);
     method.tId = setTimeout(function() {
       method.call(context, event);
     }, time);
+  },
+  // 间隔函数
+  debounce(method, context, delay, immediate) {
+    return function() {
+      let args = arguments;
+      let later = function() {
+        method.tID = null;
+        if (!immediate) {
+          method.apply(context, args);
+        }
+      };
+      let callNow = immediate && !method.tID;
+      clearTimeout(method.tID);
+      method.tID = setTimeout(later, delay);
+      if (callNow) {
+        method.apply(context, args);
+      }
+    };
   },
   // 删除 类名
   deleteClassName(el, className) {
