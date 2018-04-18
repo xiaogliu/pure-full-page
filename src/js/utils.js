@@ -39,7 +39,7 @@ const Utils = {
     clearTimeout(method.tId);
     method.tId = setTimeout(function() {
       method.call(context, event);
-    }, time);
+    }, delay);
   },
   // 间隔函数
   debounce(method, context, delay, immediate) {

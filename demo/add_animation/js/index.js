@@ -21,3 +21,7 @@ let addAnimation = currentPosition => {
 new PureFullPage({
   definePages: addAnimation,
 }).init();
+
+window.onload = function() {
+  document.querySelector('p').classList.add('fade-in');
+};
