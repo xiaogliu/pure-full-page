@@ -22,36 +22,10 @@ class PureFullPage {
     this.viewHeight = document.documentElement.clientHeight;
     // 当前位置，负值表示相对视图窗口顶部向下的偏移量
     this.currentPosition = 0;
-    // 截流/截流函数间隔时间，毫秒
-    this.DELAY = 50;
-    // 手机坐标
-    this.startX = undefined;
+    // 截流/间隔函数延迟时间，毫秒
+    this.DELAY = 70;
+    // 检测滑动方向，只需要检测纵坐标
     this.startY = undefined;
-  }
-  // 获取手机角度
-  getAngle(angX, angY) {
-    return Math.atan2(angY, angX) * 180 / Math.PI;
-  }
-  // 根据起点终点返回方向 1向上 2向下
-  getDirection(startX, startY, endX, endY) {
-    let angX = endX - startX;
-    let angY = endY - startY;
-    let result = 0;
-
-    //如果滑动距离太短
-    if (Math.abs(angX) < 2 && Math.abs(angY) < 2) {
-      return result;
-    }
-
-    let angle = this.getAngle(angX, angY);
-
-    if (angle >= -135 && angle <= -45) {
-      result = 1;
-    } else if (angle > 45 && angle < 135) {
-      result = 2;
-    }
-
-    return result;
   }
   // window resize 时重新获取位置
   getNewPosition() {
@@ -119,7 +93,7 @@ class PureFullPage {
   }
   goUp() {
     // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越大表示超出顶部部分越少
-    this.currentPosition = this.currentPosition + this.viewHeight;
+    this.currentPosition = this.currentPosition + (this.viewHeight + 60);
 
     // 当 currentPosition = 0 时，表示第一个页面的顶部与视图顶部处在相同位置，此时不允许继续向上滚动
     if (this.currentPosition > 0) {
@@ -133,7 +107,7 @@ class PureFullPage {
   }
   goDown() {
     // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越小表示超出顶部部分越多
-    this.currentPosition = this.currentPosition - this.viewHeight;
+    this.currentPosition = this.currentPosition - (this.viewHeight + 60);
 
     // 当 currentPosition =  -(this.viewHeight * (this.pagesNum - 1) 时，表示最后一个页面的顶部与视图顶部处在相同位置
     // 此时不允许继续向上滚动
@@ -187,26 +161,17 @@ class PureFullPage {
 
     // 手指接触屏幕
     Utils.addHandler(document, 'touchstart', e => {
-      this.startX = e.touches[0].pageX;
       this.startY = e.touches[0].pageY;
     });
     //手指离开屏幕
     Utils.addHandler(document, 'touchend', e => {
-      let endX, endY;
-      endX = e.changedTouches[0].pageX;
-      endY = e.changedTouches[0].pageY;
-      let direction = this.getDirection(this.startX, this.startY, endX, endY);
-      switch (direction) {
-        case 1:
-          // 手指向上滑动，对应页面向下滚动
-          this.goDown();
-          break;
-        case 2:
-          // 手指向下滑动，对应页面向上滚动
-          // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越大表示超出顶部部分越少
-          this.goUp();
-          break;
-        default:
+      let endY = e.changedTouches[0].pageY;
+      if (endY - this.startY > 0) {
+        // 手指向下滑动，对应页面向上滚动
+        this.goUp();
+      } else {
+        // 手指向上滑动，对应页面向下滚动
+        this.goDown();
       }
     });
 
