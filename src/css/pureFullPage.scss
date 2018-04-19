@@ -1,24 +1,19 @@
-/* 去除默认样式 */
+html,
 body {
   padding: 0;
   margin: 0;
-}
-
-/* pure full page 样式 */
-html,
-body {
-  width: 100%;
-  height: 100vh;
+  // 此处 body 作为全屏滚动的父级容器
   overflow: hidden;
 }
 
+/* pure full page 样式 */
 #pureFullPage {
   position: relative;
   top: 0;
   transition: all 500ms;
   .page {
     width: 100%;
-    height: 100vh;
+    height: 100%;
     &:nth-child(1) {
       background: lightpink no-repeat center/cover;
     }

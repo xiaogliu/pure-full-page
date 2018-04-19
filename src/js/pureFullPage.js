@@ -13,7 +13,7 @@ class PureFullPage {
     // 合并自定义配置
     this.options = Object.assign(defaultOptions, options);
     // 获取翻页容器
-    this.main = document.querySelector(this.options.container);
+    this.container = document.querySelector(this.options.container);
     // 获取总页数，创建右侧点导航时用
     this.pagesNum = document.querySelectorAll('.page').length;
     // 初始化右侧点导航，以备后用
@@ -23,13 +23,14 @@ class PureFullPage {
     // 当前位置，负值表示相对视图窗口顶部向下的偏移量
     this.currentPosition = 0;
     // 截流/间隔函数延迟时间，毫秒
-    this.DELAY = 70;
+    this.DELAY = 60;
     // 检测滑动方向，只需要检测纵坐标
     this.startY = undefined;
   }
   // window resize 时重新获取位置
   getNewPosition() {
     this.viewHeight = document.documentElement.clientHeight;
+    this.container.style.height = this.viewHeight + 'px';
     let activeNavIndex;
     this.navDots.forEach((e, i) => {
       if (e.classList.contains('active')) {
@@ -44,7 +45,7 @@ class PureFullPage {
   }
   // 页面跳转
   turnPage(height) {
-    this.main.style.top = height + 'px';
+    this.container.style.top = height + 'px';
   }
   // 随页面滚动改变样式
   changeNavStyle(height) {
@@ -61,7 +62,7 @@ class PureFullPage {
   createNav() {
     const nav = document.createElement('div');
     nav.className = 'nav';
-    this.main.appendChild(nav);
+    this.container.appendChild(nav);
 
     // 有几页，显示几个点
     for (let i = 0; i < this.pagesNum; i++) {
@@ -93,7 +94,7 @@ class PureFullPage {
   }
   goUp() {
     // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越大表示超出顶部部分越少
-    this.currentPosition = this.currentPosition + (this.viewHeight + 60);
+    this.currentPosition = this.currentPosition + this.viewHeight;
 
     // 当 currentPosition = 0 时，表示第一个页面的顶部与视图顶部处在相同位置，此时不允许继续向上滚动
     if (this.currentPosition > 0) {
@@ -107,7 +108,7 @@ class PureFullPage {
   }
   goDown() {
     // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越小表示超出顶部部分越多
-    this.currentPosition = this.currentPosition - (this.viewHeight + 60);
+    this.currentPosition = this.currentPosition - this.viewHeight;
 
     // 当 currentPosition =  -(this.viewHeight * (this.pagesNum - 1) 时，表示最后一个页面的顶部与视图顶部处在相同位置
     // 此时不允许继续向上滚动
@@ -128,18 +129,19 @@ class PureFullPage {
     // 向下滚动，delta < 表示向下滚动，且只有页面底部还有内容时才能滚动
     if (
       delta < 0 &&
-      this.main.offsetTop > -(this.viewHeight * (this.pagesNum - 1))
+      this.container.offsetTop > -(this.viewHeight * (this.pagesNum - 1))
     ) {
       this.goDown();
     }
 
     // 向上滚动，delta > 0，且页面顶部还有内容时才能滚动
-    if (delta > 0 && this.main.offsetTop < 0) {
+    if (delta > 0 && this.container.offsetTop < 0) {
       this.goUp();
     }
   }
   // 初始化函数
   init() {
+    this.container.style.height = this.viewHeight + 'px';
     // 创建点式导航
     if (this.options.isShowNav) {
       this.createNav();
