@@ -1,4 +1,6 @@
-这个插件通过原生 JS 实现了全屏滚动，全部代码不到 100 行。
+通过原生 JS 实现了全屏滚动：兼容 IE 10+、手机触屏，Mac 触摸板优化，支持自定义页面动画，压缩后代码只有 2k。
+
+查看 [DEMO](https://xiaogliu.github.io/pure_full_page/index.html)
 
 ## 前面的话
 
@@ -78,7 +80,3 @@ new PureFullPage('#pureFullPage')._init();
 4.  npm package；
 5.  手机支持（主要是触屏事件）;
 6.  英文版说明。
-
-## 参考资料
-
-[纯 JS 全屏滚动 / 整屏翻页](https://blog.csdn.net/tangdou5682/article/details/52351404)
