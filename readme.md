@@ -4,7 +4,7 @@
 
 ## 前面的话
 
-现在已经有很多全屏滚动插件了，比如著名的 [fullPage](https://github.com/alvarotrigo/fullPage.js)，那问什么还要自己造轮子呢？
+现在已经有很多全屏滚动插件了，比如著名的 [fullPage](https://github.com/alvarotrigo/fullPage.js)，那为什么还要自己造轮子呢？
 
 首先，现有轮子有以下问题：
 
@@ -33,40 +33,73 @@
 
 页面容器 id 必须为 `pureFullPage`，具体页面 class 必须包含 `page`，因为 css 会根据 `#pureFullPage` 和 `.page` 设置样式。
 
-### 2）引入 pureFullPage 的 css 文件
+### 2）引入 pureFullPage 的 JS 和 CSS 文件
 
-在 html 文件头部添加下面代码
+pureFullPage 的 JS 和 CSS 压缩后的文件在 `dist` 目录下，源文件在 `src` 目录下。
 
-```html
-<link rel="stylesheet" href="./css/pureFullPage.css">
-```
-
-### 3）引入 pureFullPage 的 js 文件
-
-**这里需要注意**，因为本例采用了 ES6 语法，所以不需要在 html 文件中直接引入 `pureFullPage.js`，只需要引入入口文件（本例中是 `index.js`），在入口文件中通过 `import` 引入 `pureFullPage.js`。
-
-* 在 html 中引入入口文件
+* 传统引入方式
 
 ```html
-<!-- 本例中入口文件是 index.js -->
-<script type="module" src="./js/index.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    ...
+    <link rel="stylesheet" href="youtpath/pureFullPage.min.css">
+</head>
+<body>
+    ...
+    <script src="youtpath/pureFullPage.min.js"></script>
+</body>
+</html>
 ```
 
-这里要注意，chrome 现在原生支持 ES module 语法，但需要注明 `type="module"`
+* ES6 模块化引入
 
-* 在 `index.js` 中引入 `pureFullPage.js` ，创建并初始化实例
+npm package 开发中，敬请期待。。。
+
+> 不闲麻烦，可以将 `src` 目录下的源文件手动引入项目...
+
+### 3）新建 pureFullPage 实例并初始化
 
 ```js
-// 引入 pureFullPage.js
-import PureFullPage from './components/pureFullPage.js';
-
-// 创建实例时，把页面容器 id 作为参数传入
-new PureFullPage('#pureFullPage')._init();
+// 创建实例并初始化
+new PureFullPage().init();
 ```
 
-### 4）运行
+### 4）自定义参数
 
-不同于普通脚本，ES6 模块脚本遵循同源策略，所以不能在跨域请求时（如果没有设置 CORS header）或者本地文件系统使用，请在本地服务器中运行本例中的 demo。
+实例化 pureFullPage 时接受一个对象作为参数，可以控制是否显示右侧导航（移动端往往不需要右侧导航）及自定义页面动画，实例代码如下：
+
+```js
+// 创建实例并初始化
+new PureFullPage({
+  isShowNav: false,
+  definePages: addAnimation,
+}).init();
+```
+
+其中：
+
+* `isShowNav` 控制是否显示右侧导航，Boolean 类型，默认为 `true`，设为 `false` 则不显示；
+
+* `definePages` 是 Function 类型，默认为空函数（什么都不操作）。这个函数会在页面每次滚动时触发，主要用来**获取将要进入的页面元素**，拿到页面元素，就可以进行相关操作了，一般是添加动画。
+
+`definePages` 需要特别说明下，若需要自定义，则**定义时不能使用箭头函数**，因为自定义函数内部 `this` 在 `pureFullPage` 实现时绑定到了实例本身，方便获取将要进入的页面元素，见下面为将要进入的页面添加动画的示例代码：
+
+```js
+// 不能使用箭头函数，要引用实例中的 this
+let addAnimation = function() {
+  // i 表示每次滑动将要进入的页面的索引，可以通过 this.pages[i] 获取当前页面元素
+  // 取得将要进入的页面元素后便可以做进一步操作
+  let i = -(this.currentPosition / this.viewHeight);
+
+  // 为将要进入页面添加动画
+  document.querySelector('.fade-in').classList.remove('fade-in');
+  this.pages[i].querySelector('p').classList.add('fade-in');
+};
+```
+
+> 添加动画的完整代码在 `demo/add_animation/` 目录下
 
 ## 了解更多
 
@@ -75,8 +108,5 @@ new PureFullPage('#pureFullPage')._init();
 ## TODO
 
 1.  详细介绍文章；
-2.  更多参数配置；
-3.  浏览器兼容（不然 utils 没意义了）；
-4.  npm package；
-5.  手机支持（主要是触屏事件）;
-6.  英文版说明。
+2.  npm package；
+3.  英文版说明。

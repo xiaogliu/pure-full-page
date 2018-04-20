@@ -12,10 +12,13 @@ class PureFullPage {
     Utils.polyfill();
     // 合并自定义配置
     this.options = Object.assign(defaultOptions, options);
+    // 将用户自定义函数绑定到实例 this
+    this.options.definePages = this.options.definePages.bind(this);
     // 获取翻页容器
     this.container = document.querySelector(this.options.container);
     // 获取总页数，创建右侧点导航时用
-    this.pagesNum = document.querySelectorAll('.page').length;
+    this.pages = document.querySelectorAll('.page');
+    this.pagesNum = this.pages.length;
     // 初始化右侧点导航，以备后用
     this.navDots = [];
     // 获取当前视图高度
@@ -81,7 +84,7 @@ class PureFullPage {
         // 页面跳转
         this.currentPosition = -(i * this.viewHeight);
         // 处理用户自定义函数
-        this.options.definePages(this.currentPosition);
+        this.options.definePages();
         this.turnPage(this.currentPosition);
 
         // 更改样式
@@ -104,7 +107,7 @@ class PureFullPage {
     this.turnPage(this.currentPosition);
     this.changeNavStyle(this.currentPosition);
     // 处理用户自定义函数
-    this.options.definePages(this.currentPosition);
+    this.options.definePages();
   }
   goDown() {
     // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越小表示超出顶部部分越多
@@ -120,7 +123,7 @@ class PureFullPage {
     this.changeNavStyle(this.currentPosition);
 
     // 处理用户自定义函数
-    this.options.definePages(this.currentPosition);
+    this.options.definePages();
   }
   // 鼠标滚动逻辑（全屏滚动关键逻辑）
   scrollMouse(event) {
