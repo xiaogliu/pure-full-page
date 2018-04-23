@@ -68,7 +68,7 @@ new PureFullPage().init();
 
 ### 4）自定义参数
 
-实例化 pureFullPage 时接受一个对象作为参数，可以控制是否显示右侧导航（移动端往往不需要右侧导航）及自定义页面动画，实例代码如下：
+实例化 pureFullPage 时接受一个对象作为参数，可以控制是否显示右侧导航（移动端往往不需要右侧导航）及自定义页面动画，示例代码如下：
 
 ```js
 // 创建实例并初始化
@@ -109,4 +109,9 @@ let addAnimation = function() {
 
 1.  详细介绍文章；
 2.  npm package；
-3.  英文版说明。
+3.  英文版说明；
+4.  更新 demo/es6_module。
+
+## License
+
+MIT
