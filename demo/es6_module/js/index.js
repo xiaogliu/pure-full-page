@@ -1,3 +1,4 @@
 import PureFullPage from './components/pureFullPage.js';
 
-new PureFullPage('#pureFullPage').init();
+// 创建全屏滚动实例，并初始化
+new PureFullPage().init();

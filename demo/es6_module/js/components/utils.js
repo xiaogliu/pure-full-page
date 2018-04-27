@@ -1,41 +1,9 @@
 /**
- * 工具函数
- * 惰性载入函数降低了代码的可读性，如果不是频繁操作的项目，不引入惰性载入
+ * Utils 为工具函数，对原生API做兼容性处理及提取公共方法
  */
+
 export default {
-  // 删除 类名
-  deleteClassName(el, className) {
-    if (el.classList.contains(className)) {
-      el.classList.remove(className);
-    }
-  },
-  // 将伪数组转化为数组
-  transferToArray(obj) {
-    return Array.prototype.slice.call(obj);
-  },
-  // 截流函数
-  throttle(method, context, event, time) {
-    clearTimeout(method.tId);
-    method.tId = setTimeout(function() {
-      method.call(context, event);
-    }, time);
-  },
-  // 获取 viewport 尺寸
-  getViewportDimension() {
-    if (document.compatMode === 'BackCompat') {
-      return {
-        width: document.body.clientWidth,
-        height: document.body.clientHeight,
-      };
-    }
-    return {
-      width: document.documentElement.clientWidth,
-      height: document.documentElement.clientHeight,
-    };
-  },
-  /**
-   * 兼容事件 begin
-   */
+  // 添加事件
   addHandler(element, type, handler) {
     if (element.addEventListener) {
       // 第一次调用初始化
@@ -51,44 +19,6 @@ export default {
       this.addHandler = function(element, type, handler) {
         element.attachEvent(`on${type}`, handler);
       };
-    } else {
-      element[`on${type}`] = handler;
-
-      this.addHandler = function(element, type, handler) {
-        element[`on${type}`] = handler;
-      };
-    }
-  },
-  removeHandler(element, type, handler) {
-    if (element.removeEventListener) {
-      element.removeEventListener(type, handler, false);
-
-      this.removeHandler = function(element, type, handler) {
-        element.removeEventListener(type, handler, false);
-      };
-    } else if (element.detachEvent) {
-      element.detachEvent(`on${type}`, handler);
-
-      this.removeHandler = function(element, type, handler) {
-        element.detachEvent(`on${type}`, handler);
-      };
-    } else {
-      element[`on${type}`] = null;
-      this.removeHandler = function(element, type, handler) {
-        element[`on${type}`] = null;
-      };
-    }
-  },
-  getEvent(event) {
-    if (event) {
-      // 第一次调用之后惰性载入
-      this.getEvent = event => event;
-
-      // 第一次调用使用
-      return event;
-    } else {
-      this.getEvent = () => window.event;
-      return window.event;
     }
   },
   // 鼠标滚轮事件
@@ -100,8 +30,66 @@ export default {
       // 第一次调用使用
       return event.wheelDelta;
     } else {
-      this.getWheelDelta = event => -event.detail * 40;
-      return -event.detail * 40;
+      // 兼容火狐
+      this.getWheelDelta = event => -event.detail;
+      return -event.detail;
+    }
+  },
+  // 截流函数
+  throttle(method, context, event, delay) {
+    clearTimeout(method.tId);
+    method.tId = setTimeout(function() {
+      method.call(context, event);
+    }, delay);
+  },
+  // 间隔函数
+  debounce(method, context, delay, immediate) {
+    return function() {
+      let args = arguments;
+      let later = function() {
+        method.tID = null;
+        if (!immediate) {
+          method.apply(context, args);
+        }
+      };
+      let callNow = immediate && !method.tID;
+      clearTimeout(method.tID);
+      method.tID = setTimeout(later, delay);
+      if (callNow) {
+        method.apply(context, args);
+      }
+    };
+  },
+  // 删除 类名
+  deleteClassName(el, className) {
+    if (el.classList.contains(className)) {
+      el.classList.remove(className);
+    }
+  },
+  // polyfill Object.assign
+  polyfill() {
+    if (typeof Object.assign != 'function') {
+      Object.defineProperty(Object, 'assign', {
+        value: function assign(target, varArgs) {
+          if (target == null) {
+            throw new TypeError('Cannot convert undefined or null to object');
+          }
+          let to = Object(target);
+          for (let index = 1; index < arguments.length; index++) {
+            let nextSource = arguments[index];
+            if (nextSource != null) {
+              for (let nextKey in nextSource) {
+                if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+                  to[nextKey] = nextSource[nextKey];
+                }
+              }
+            }
+          }
+          return to;
+        },
+        writable: true,
+        configurable: true,
+      });
     }
   },
 };
