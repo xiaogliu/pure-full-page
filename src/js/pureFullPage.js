@@ -9,7 +9,7 @@ class PureFullPage {
       isShowNav: true,
       definePages: () => {},
     };
-    Utils.polyfill();
+    utils.polyfill();
     // 合并自定义配置
     this.options = Object.assign(defaultOptions, options);
     // 将用户自定义函数绑定到实例 this
@@ -44,7 +44,7 @@ class PureFullPage {
     this.turnPage(this.currentPosition);
   }
   handleWindowResize(event) {
-    Utils.throttle(this.getNewPosition, this, event, this.DELAY);
+    utils.throttle(this.getNewPosition, this, event, this.DELAY);
   }
   // 页面跳转
   turnPage(height) {
@@ -54,7 +54,7 @@ class PureFullPage {
   changeNavStyle(height) {
     if (this.options.isShowNav) {
       this.navDots.forEach(el => {
-        Utils.deleteClassName(el, 'active');
+        utils.deleteClassName(el, 'active');
       });
 
       let i = -(height / this.viewHeight);
@@ -80,7 +80,7 @@ class PureFullPage {
 
     // 添加点式导航击事件
     this.navDots.forEach((el, i) => {
-      Utils.addHandler(el, 'click', () => {
+      utils.addHandler(el, 'click', () => {
         // 页面跳转
         this.currentPosition = -(i * this.viewHeight);
         // 处理用户自定义函数
@@ -89,7 +89,7 @@ class PureFullPage {
 
         // 更改样式
         this.navDots.forEach(el => {
-          Utils.deleteClassName(el, 'active');
+          utils.deleteClassName(el, 'active');
         });
         el.classList.add('active');
       });
@@ -127,7 +127,7 @@ class PureFullPage {
   }
   // 鼠标滚动逻辑（全屏滚动关键逻辑）
   scrollMouse(event) {
-    let delta = Utils.getWheelDelta(event);
+    let delta = utils.getWheelDelta(event);
 
     // 向下滚动，delta < 表示向下滚动，且只有页面底部还有内容时才能滚动
     if (
@@ -150,7 +150,7 @@ class PureFullPage {
       this.createNav();
     }
     // 设置间隔函数
-    let handleMouseWheel = Utils.debounce(
+    let handleMouseWheel = utils.debounce(
       this.scrollMouse,
       this,
       this.DELAY,
@@ -159,17 +159,17 @@ class PureFullPage {
 
     // 鼠标滚轮监听，火狐鼠标滚动事件不同其他
     if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
-      Utils.addHandler(document, 'mousewheel', handleMouseWheel);
+      utils.addHandler(document, 'mousewheel', handleMouseWheel);
     } else {
-      Utils.addHandler(document, 'DOMMouseScroll', handleMouseWheel);
+      utils.addHandler(document, 'DOMMouseScroll', handleMouseWheel);
     }
 
     // 手指接触屏幕
-    Utils.addHandler(document, 'touchstart', e => {
+    utils.addHandler(document, 'touchstart', e => {
       this.startY = e.touches[0].pageY;
     });
     //手指离开屏幕
-    Utils.addHandler(document, 'touchend', e => {
+    utils.addHandler(document, 'touchend', e => {
       let endY = e.changedTouches[0].pageY;
       if (endY - this.startY > 0) {
         // 手指向下滑动，对应页面向上滚动
@@ -181,6 +181,6 @@ class PureFullPage {
     });
 
     // 窗口尺寸变化时重置位置
-    Utils.addHandler(window, 'resize', this.handleWindowResize.bind(this));
+    utils.addHandler(window, 'resize', this.handleWindowResize.bind(this));
   }
 }

@@ -1,7 +1,7 @@
 /**
- * Utils 为工具函数，对原生API做兼容性处理及提取公共方法
+ * utils 为工具函数，对原生API做兼容性处理及提取公共方法
  */
-const Utils = {
+const utils = {
   // 添加事件
   addHandler(element, type, handler) {
     if (element.addEventListener) {
