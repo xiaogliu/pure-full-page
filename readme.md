@@ -73,12 +73,15 @@ new PureFullPage().init();
 ```js
 // 创建实例并初始化
 new PureFullPage({
-  isShowNav: false,
+  delay: 150,
+  isShowNav: true,
   definePages: addAnimation,
 }).init();
 ```
 
 其中：
+
+* `delay` 截流/间隔函数延迟时间，默认 150 ms，建议再 100 ～ 200 之间。
 
 * `isShowNav` 控制是否显示右侧导航，Boolean 类型，默认为 `true`，设为 `false` 则不显示；
 
