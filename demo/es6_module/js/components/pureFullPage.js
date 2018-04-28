@@ -6,6 +6,7 @@ export default class PureFullPage {
     const defaultOptions = {
       container: '#pureFullPage',
       isShowNav: true,
+      delay: 150,
       definePages: () => {},
     };
     utils.polyfill();
@@ -25,7 +26,7 @@ export default class PureFullPage {
     // 当前位置，负值表示相对视图窗口顶部向下的偏移量
     this.currentPosition = 0;
     // 截流/间隔函数延迟时间，毫秒
-    this.DELAY = 60;
+    this.DELAY = this.options.delay;
     // 检测滑动方向，只需要检测纵坐标
     this.startY = undefined;
   }
