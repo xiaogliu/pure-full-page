@@ -45,7 +45,8 @@ class PureFullPage {
     this.turnPage(this.currentPosition);
   }
   handleWindowResize(event) {
-    utils.throttle(this.getNewPosition, this, event, this.DELAY);
+    // 设置防抖动函数
+    utils.debounce(this.getNewPosition, this, event, this.DELAY);
   }
   // 页面跳转
   turnPage(height) {
@@ -100,7 +101,7 @@ class PureFullPage {
     // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越大表示超出顶部部分越少
     this.currentPosition = this.currentPosition + this.viewHeight;
 
-    // 当 currentPosition = 0 时，表示第一个页面的顶部与视图顶部处在相同位置，此时不允许继续向上滚动
+    // 当 currentPosition = 0 时，表示第一个页面的顶部与整个页面顶部处在相同位置，此时不允许继续向上滚动
     if (this.currentPosition > 0) {
       this.currentPosition = 0;
     }
@@ -114,8 +115,8 @@ class PureFullPage {
     // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越小表示超出顶部部分越多
     this.currentPosition = this.currentPosition - this.viewHeight;
 
-    // 当 currentPosition =  -(this.viewHeight * (this.pagesNum - 1) 时，表示最后一个页面的顶部与视图顶部处在相同位置
-    // 此时不允许继续向上滚动
+    // 当 currentPosition =  -(this.viewHeight * (this.pagesNum - 1) 时，表示最后一个页面的顶部与整个页面顶部处在相同位置
+    // 此时不允许继续向下滚动
     if (this.currentPosition < -(this.viewHeight * (this.pagesNum - 1))) {
       this.currentPosition = -(this.viewHeight * (this.pagesNum - 1));
     }
@@ -150,8 +151,8 @@ class PureFullPage {
     if (this.options.isShowNav) {
       this.createNav();
     }
-    // 设置间隔函数
-    let handleMouseWheel = utils.debounce(
+    // 设置截流函数
+    let handleMouseWheel = utils.throttle(
       this.scrollMouse,
       this,
       this.DELAY,

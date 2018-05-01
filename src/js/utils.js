@@ -34,15 +34,16 @@ const utils = {
       return -event.detail;
     }
   },
-  // 截流函数
-  throttle(method, context, event, delay) {
+  // 防抖动函数，method 回调函数，context 上下文，event 传入的时间，delay 延迟函数
+  debounce(method, context, event, delay) {
     clearTimeout(method.tId);
     method.tId = setTimeout(function() {
       method.call(context, event);
     }, delay);
   },
-  // 间隔函数
-  debounce(method, context, delay, immediate) {
+  // 截流函数，method 回调函数，context 上下文，delay 延迟函数，
+  // immediate 传入 true 表示在 delay 开始时执行回调函数
+  throttle(method, context, delay, immediate) {
     return function() {
       let args = arguments;
       let later = function() {
