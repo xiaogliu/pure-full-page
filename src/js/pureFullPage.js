@@ -81,7 +81,7 @@ class PureFullPage {
 
     // 添加点式导航点击事件
     this.navDots.forEach((el, i) => {
-      utils.addHandler(el, 'click', () => {
+      el.addEventListener('click', event => {
         // 页面跳转
         this.currentPosition = -(i * this.viewHeight);
         // 处理用户自定义函数
@@ -92,7 +92,7 @@ class PureFullPage {
         this.navDots.forEach(el => {
           utils.deleteClassName(el, 'active');
         });
-        el.classList.add('active');
+        event.target.classList.add('active');
       });
     });
   }
@@ -149,18 +149,18 @@ class PureFullPage {
 
     // 鼠标滚轮监听，火狐鼠标滚动事件不同其他
     if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
-      utils.addHandler(document, 'mousewheel', handleMouseWheel);
+      document.addEventListener('mousewheel', handleMouseWheel);
     } else {
-      utils.addHandler(document, 'DOMMouseScroll', handleMouseWheel);
+      document.addEventListener('DOMMouseScroll', handleMouseWheel);
     }
 
     // 手指接触屏幕
-    utils.addHandler(document, 'touchstart', e => {
-      this.startY = e.touches[0].pageY;
+    document.addEventListener('touchstart', event => {
+      this.startY = event.touches[0].pageY;
     });
     //手指离开屏幕
-    utils.addHandler(document, 'touchend', e => {
-      let endY = e.changedTouches[0].pageY;
+    document.addEventListener('touchend', event => {
+      let endY = event.changedTouches[0].pageY;
       if (endY - this.startY > 0) {
         // 手指向下滑动，对应页面向上滚动
         this.goUp();
@@ -171,6 +171,6 @@ class PureFullPage {
     });
 
     // 窗口尺寸变化时重置位置
-    utils.addHandler(window, 'resize', this.handleWindowResize.bind(this));
+    window.addEventListener('resize', this.handleWindowResize.bind(this));
   }
 }

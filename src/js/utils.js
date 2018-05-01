@@ -2,16 +2,6 @@
  * utils 为工具函数，对原生API做兼容性处理及提取公共方法
  */
 const utils = {
-  // 添加事件
-  addHandler(element, type, handler) {
-    // 第一次调用初始化
-    element.addEventListener(type, handler, false);
-
-    // 第一次之后调用直接使用更改的函数，无返回值，不能使用箭头函数
-    this.addHandler = function(element, type, handler) {
-      element.addEventListener(type, handler, false);
-    };
-  },
   // 鼠标滚轮事件
   getWheelDelta(event) {
     if (event.wheelDelta) {
