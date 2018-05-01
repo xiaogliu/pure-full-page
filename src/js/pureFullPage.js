@@ -132,6 +132,23 @@ class PureFullPage {
       this.goUp();
     }
   }
+  // 触屏事件
+  handleTouchEnd(event) {
+    let endY = event.changedTouches[0].pageY;
+    if (
+      endY - this.startY > 0 &&
+      -this.container.offsetTop >= this.viewHeight
+    ) {
+      // 手指向下滑动，对应页面向上滚动
+      this.goUp();
+    } else if (
+      endY - this.startY < 0 &&
+      -this.container.offsetTop <= this.viewHeight * (this.pagesNum - 2)
+    ) {
+      // 手指向上滑动，对应页面向下滚动
+      this.goDown();
+    }
+  }
   // 初始化函数
   init() {
     this.container.style.height = this.viewHeight + 'px';
@@ -159,16 +176,7 @@ class PureFullPage {
       this.startY = event.touches[0].pageY;
     });
     //手指离开屏幕
-    document.addEventListener('touchend', event => {
-      let endY = event.changedTouches[0].pageY;
-      if (endY - this.startY > 0) {
-        // 手指向下滑动，对应页面向上滚动
-        this.goUp();
-      } else {
-        // 手指向上滑动，对应页面向下滚动
-        this.goDown();
-      }
-    });
+    document.addEventListener('touchend', this.handleTouchEnd.bind(this));
 
     // 窗口尺寸变化时重置位置
     window.addEventListener('resize', this.handleWindowResize.bind(this));
