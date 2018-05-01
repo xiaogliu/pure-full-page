@@ -4,7 +4,6 @@ export default class PureFullPage {
   constructor(options) {
     // 默认配置
     const defaultOptions = {
-      container: '#pureFullPage',
       isShowNav: true,
       delay: 150,
       definePages: () => {},
@@ -15,7 +14,7 @@ export default class PureFullPage {
     // 将用户自定义函数绑定到实例 this
     this.options.definePages = this.options.definePages.bind(this);
     // 获取翻页容器
-    this.container = document.querySelector(this.options.container);
+    this.container = document.querySelector('#pureFullPage');
     // 获取总页数，创建右侧点导航时用
     this.pages = document.querySelectorAll('.page');
     this.pagesNum = this.pages.length;
@@ -44,7 +43,8 @@ export default class PureFullPage {
     this.turnPage(this.currentPosition);
   }
   handleWindowResize(event) {
-    utils.throttle(this.getNewPosition, this, event, this.DELAY);
+    // 设置防抖动函数
+    utils.debounce(this.getNewPosition, this, event, this.DELAY);
   }
   // 页面跳转
   turnPage(height) {
@@ -78,9 +78,9 @@ export default class PureFullPage {
     // 添加初始样式
     this.navDots[0].classList.add('active');
 
-    // 添加点式导航击事件
+    // 添加点式导航点击事件
     this.navDots.forEach((el, i) => {
-      utils.addHandler(el, 'click', () => {
+      el.addEventListener('click', event => {
         // 页面跳转
         this.currentPosition = -(i * this.viewHeight);
         // 处理用户自定义函数
@@ -91,7 +91,7 @@ export default class PureFullPage {
         this.navDots.forEach(el => {
           utils.deleteClassName(el, 'active');
         });
-        el.classList.add('active');
+        event.target.classList.add('active');
       });
     });
   }
@@ -121,13 +121,13 @@ export default class PureFullPage {
     // 向下滚动，delta < 表示向下滚动，且只有页面底部还有内容时才能滚动
     if (
       delta < 0 &&
-      this.container.offsetTop > -(this.viewHeight * (this.pagesNum - 1))
+      -this.container.offsetTop <= this.viewHeight * (this.pagesNum - 2)
     ) {
       this.goDown();
     }
 
     // 向上滚动，delta > 0，且页面顶部还有内容时才能滚动
-    if (delta > 0 && this.container.offsetTop < 0) {
+    if (delta > 0 && -this.container.offsetTop >= this.viewHeight) {
       this.goUp();
     }
   }
@@ -138,8 +138,8 @@ export default class PureFullPage {
     if (this.options.isShowNav) {
       this.createNav();
     }
-    // 设置间隔函数
-    let handleMouseWheel = utils.debounce(
+    // 设置截流函数
+    let handleMouseWheel = utils.throttle(
       this.scrollMouse,
       this,
       this.DELAY,
@@ -148,18 +148,18 @@ export default class PureFullPage {
 
     // 鼠标滚轮监听，火狐鼠标滚动事件不同其他
     if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
-      utils.addHandler(document, 'mousewheel', handleMouseWheel);
+      document.addEventListener('mousewheel', handleMouseWheel);
     } else {
-      utils.addHandler(document, 'DOMMouseScroll', handleMouseWheel);
+      document.addEventListener('DOMMouseScroll', handleMouseWheel);
     }
 
     // 手指接触屏幕
-    utils.addHandler(document, 'touchstart', e => {
-      this.startY = e.touches[0].pageY;
+    document.addEventListener('touchstart', event => {
+      this.startY = event.touches[0].pageY;
     });
     //手指离开屏幕
-    utils.addHandler(document, 'touchend', e => {
-      let endY = e.changedTouches[0].pageY;
+    document.addEventListener('touchend', event => {
+      let endY = event.changedTouches[0].pageY;
       if (endY - this.startY > 0) {
         // 手指向下滑动，对应页面向上滚动
         this.goUp();
@@ -170,6 +170,6 @@ export default class PureFullPage {
     });
 
     // 窗口尺寸变化时重置位置
-    utils.addHandler(window, 'resize', this.handleWindowResize.bind(this));
+    window.addEventListener('resize', this.handleWindowResize.bind(this));
   }
 }

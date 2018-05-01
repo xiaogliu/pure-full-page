@@ -1,26 +1,7 @@
 /**
- * Utils 为工具函数，对原生API做兼容性处理及提取公共方法
+ * utils 为工具函数，对原生API做兼容性处理及提取公共方法
  */
-
 export default {
-  // 添加事件
-  addHandler(element, type, handler) {
-    if (element.addEventListener) {
-      // 第一次调用初始化
-      element.addEventListener(type, handler, false);
-
-      // 第一次之后调用直接使用更改的函数，无返回值，不能使用箭头函数
-      this.addHandler = function(element, type, handler) {
-        element.addEventListener(type, handler, false);
-      };
-    } else if (element.attachEvent) {
-      element.attachEvent(`on${type}`, handler);
-
-      this.addHandler = function(element, type, handler) {
-        element.attachEvent(`on${type}`, handler);
-      };
-    }
-  },
   // 鼠标滚轮事件
   getWheelDelta(event) {
     if (event.wheelDelta) {
@@ -35,24 +16,25 @@ export default {
       return -event.detail;
     }
   },
-  // 截流函数
-  throttle(method, context, event, delay) {
+  // 防抖动函数，method 回调函数，context 上下文，event 传入的时间，delay 延迟函数
+  debounce(method, context, event, delay) {
     clearTimeout(method.tId);
-    method.tId = setTimeout(function() {
+    method.tId = setTimeout(() => {
       method.call(context, event);
     }, delay);
   },
-  // 间隔函数
-  debounce(method, context, delay, immediate) {
+  // 截流函数，method 回调函数，context 上下文，delay 延迟函数，
+  // immediate 传入 true 表示在 delay 开始时执行回调函数
+  throttle(method, context, delay, immediate) {
     return function() {
-      let args = arguments;
-      let later = function() {
+      const args = arguments;
+      const later = () => {
         method.tID = null;
         if (!immediate) {
           method.apply(context, args);
         }
       };
-      let callNow = immediate && !method.tID;
+      const callNow = immediate && !method.tID;
       clearTimeout(method.tID);
       method.tID = setTimeout(later, delay);
       if (callNow) {
