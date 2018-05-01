@@ -97,54 +97,45 @@ class PureFullPage {
     });
   }
   goUp() {
-    // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越大表示超出顶部部分越少
-    this.currentPosition = this.currentPosition + this.viewHeight;
+    if (-this.container.offsetTop >= this.viewHeight) {
+      // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越大表示超出顶部部分越少
+      this.currentPosition = this.currentPosition + this.viewHeight;
 
-    this.turnPage(this.currentPosition);
-    this.changeNavStyle(this.currentPosition);
-    // 处理用户自定义函数
-    this.options.definePages();
+      this.turnPage(this.currentPosition);
+      this.changeNavStyle(this.currentPosition);
+      // 处理用户自定义函数
+      this.options.definePages();
+    }
   }
   goDown() {
-    // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越小表示超出顶部部分越多
-    this.currentPosition = this.currentPosition - this.viewHeight;
+    if (-this.container.offsetTop <= this.viewHeight * (this.pagesNum - 2)) {
+      // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越小表示超出顶部部分越多
+      this.currentPosition = this.currentPosition - this.viewHeight;
 
-    this.turnPage(this.currentPosition);
-    this.changeNavStyle(this.currentPosition);
+      this.turnPage(this.currentPosition);
+      this.changeNavStyle(this.currentPosition);
 
-    // 处理用户自定义函数
-    this.options.definePages();
+      // 处理用户自定义函数
+      this.options.definePages();
+    }
   }
   // 鼠标滚动逻辑（全屏滚动关键逻辑）
   scrollMouse(event) {
     let delta = utils.getWheelDelta(event);
-
     // delta < 0，鼠标往前滚动，且只有页面底部还有页面时页面向下滚动
-    if (
-      delta < 0 &&
-      -this.container.offsetTop <= this.viewHeight * (this.pagesNum - 2)
-    ) {
+    if (delta < 0) {
       this.goDown();
-    }
-
-    // delta > 0，鼠标往后滚动，且页面顶部还有页面时页面向上滚动
-    if (delta > 0 && -this.container.offsetTop >= this.viewHeight) {
+    } else {
       this.goUp();
     }
   }
   // 触屏事件
   handleTouchEnd(event) {
     let endY = event.changedTouches[0].pageY;
-    if (
-      endY - this.startY > 0 &&
-      -this.container.offsetTop >= this.viewHeight
-    ) {
+    if (endY - this.startY > 0) {
       // 手指向下滑动，对应页面向上滚动
       this.goUp();
-    } else if (
-      endY - this.startY < 0 &&
-      -this.container.offsetTop <= this.viewHeight * (this.pagesNum - 2)
-    ) {
+    } else {
       // 手指向上滑动，对应页面向下滚动
       this.goDown();
     }
