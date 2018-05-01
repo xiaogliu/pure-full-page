@@ -118,7 +118,7 @@ export default class PureFullPage {
   scrollMouse(event) {
     let delta = utils.getWheelDelta(event);
 
-    // 向下滚动，delta < 表示向下滚动，且只有页面底部还有内容时才能滚动
+    // delta < 0，鼠标往前滚动，且只有页面底部还有页面时页面向下滚动
     if (
       delta < 0 &&
       -this.container.offsetTop <= this.viewHeight * (this.pagesNum - 2)
@@ -126,7 +126,7 @@ export default class PureFullPage {
       this.goDown();
     }
 
-    // 向上滚动，delta > 0，且页面顶部还有内容时才能滚动
+    // delta > 0，鼠标往后滚动，且页面顶部还有页面时页面向上滚动
     if (delta > 0 && -this.container.offsetTop >= this.viewHeight) {
       this.goUp();
     }

@@ -57,7 +57,7 @@ pureFullPage 的 JS 和 CSS 压缩后的文件在 `dist` 目录下，源文件�
 
 npm package 开发中，敬请期待。。。
 
-> 不闲麻烦，可以将 `src` 目录下的源文件手动引入项目...
+> 不闲麻烦，可以将 `src` 目录下的源文件手动引入项目，在 demo/es6_moudle 中已做模块化处理...
 
 ### 3）新建 pureFullPage 实例并初始化
 
@@ -106,14 +106,7 @@ let addAnimation = function() {
 
 ## 了解更多
 
-可查看这篇文章查看详细开发过程（待补充）
-
-## TODO
-
-1.  详细介绍文章；
-2.  npm package；
-3.  英文版说明；
-4.  更新 demo/es6_module。
+可查看 [用 ES6 写全屏滚动插件](https://xiaogliu.github.io/2018/04/28/develop-full-page-scroll-by-es6/) 了解详细开发过程。
 
 ## License
 
