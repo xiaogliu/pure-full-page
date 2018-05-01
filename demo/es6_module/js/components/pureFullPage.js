@@ -100,9 +100,10 @@ export default class PureFullPage {
     this.currentPosition = this.currentPosition + this.viewHeight;
 
     // 当 currentPosition = 0 时，表示第一个页面的顶部与视图顶部处在相同位置，此时不允许继续向上滚动
-    if (this.currentPosition > 0) {
-      this.currentPosition = 0;
-    }
+    // 在滚动的时候已做限制，此处不需要再做限制
+    // if (this.currentPosition > 0) {
+    //   this.currentPosition = 0;
+    // }
 
     this.turnPage(this.currentPosition);
     this.changeNavStyle(this.currentPosition);
@@ -114,10 +115,10 @@ export default class PureFullPage {
     this.currentPosition = this.currentPosition - this.viewHeight;
 
     // 当 currentPosition =  -(this.viewHeight * (this.pagesNum - 1) 时，表示最后一个页面的顶部与视图顶部处在相同位置
-    // 此时不允许继续向上滚动
-    if (this.currentPosition < -(this.viewHeight * (this.pagesNum - 1))) {
-      this.currentPosition = -(this.viewHeight * (this.pagesNum - 1));
-    }
+    // 此时不允许继续向上滚动;;; 在滚动的时候已做限制，此处不需要再做限制
+    // if (this.currentPosition < -(this.viewHeight * (this.pagesNum - 1))) {
+    //   this.currentPosition = -(this.viewHeight * (this.pagesNum - 1));
+    // }
 
     this.turnPage(this.currentPosition);
     this.changeNavStyle(this.currentPosition);
