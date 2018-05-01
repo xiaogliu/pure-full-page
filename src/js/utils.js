@@ -4,13 +4,20 @@
 const utils = {
   // 添加事件
   addHandler(element, type, handler) {
-    // 第一次调用初始化
-    element.addEventListener(type, handler, false);
-
-    // 第一次之后调用直接使用更改的函数，无返回值，不能使用箭头函数
-    this.addHandler = function(element, type, handler) {
+    if (element.addEventListener) {
+      // 第一次调用初始化
       element.addEventListener(type, handler, false);
-    };
+
+      // 第一次之后调用直接使用更改的函数，无返回值，不能使用箭头函数
+      this.addHandler = function(element, type, handler) {
+        element.addEventListener(type, handler, false);
+      };
+    } else if (element.attachEvent) {
+      element.attachEvent(`on${type}`, handler);
+      this.addHandler = function(element, type, handler) {
+        element.attachEvent(`on${type}`, handler);
+      };
+    }
   },
   // 鼠标滚轮事件
   getWheelDelta(event) {
