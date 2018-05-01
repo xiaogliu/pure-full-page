@@ -97,6 +97,7 @@ class PureFullPage {
     });
   }
   goUp() {
+    // 只有页面顶部还有页面时页面向上滚动
     if (-this.container.offsetTop >= this.viewHeight) {
       // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越大表示超出顶部部分越少
       this.currentPosition = this.currentPosition + this.viewHeight;
@@ -108,6 +109,7 @@ class PureFullPage {
     }
   }
   goDown() {
+    // 只有页面底部还有页面时页面向下滚动
     if (-this.container.offsetTop <= this.viewHeight * (this.pagesNum - 2)) {
       // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越小表示超出顶部部分越多
       this.currentPosition = this.currentPosition - this.viewHeight;
@@ -122,7 +124,7 @@ class PureFullPage {
   // 鼠标滚动逻辑（全屏滚动关键逻辑）
   scrollMouse(event) {
     let delta = utils.getWheelDelta(event);
-    // delta < 0，鼠标往前滚动，且只有页面底部还有页面时页面向下滚动
+    // delta < 0，鼠标往前滚动，页面向下滚动
     if (delta < 0) {
       this.goDown();
     } else {
@@ -132,12 +134,12 @@ class PureFullPage {
   // 触屏事件
   handleTouchEnd(event) {
     let endY = event.changedTouches[0].pageY;
-    if (endY - this.startY > 0) {
-      // 手指向下滑动，对应页面向上滚动
-      this.goUp();
-    } else {
+    if (endY - this.startY < 0) {
       // 手指向上滑动，对应页面向下滚动
       this.goDown();
+    } else {
+      // 手指向下滑动，对应页面向上滚动
+      this.goUp();
     }
   }
   // 初始化函数
@@ -168,6 +170,9 @@ class PureFullPage {
     });
     //手指离开屏幕
     document.addEventListener('touchend', this.handleTouchEnd.bind(this));
+    document.addEventListener('touchmove', event => {
+      event.preventDefault();
+    });
 
     // 窗口尺寸变化时重置位置
     window.addEventListener('resize', this.handleWindowResize.bind(this));
