@@ -19,7 +19,7 @@ const utils = {
   // 防抖动函数，method 回调函数，context 上下文，event 传入的时间，delay 延迟函数
   debounce(method, context, event, delay) {
     clearTimeout(method.tId);
-    method.tId = setTimeout(function() {
+    method.tId = setTimeout(() => {
       method.call(context, event);
     }, delay);
   },
@@ -28,7 +28,7 @@ const utils = {
   throttle(method, context, delay, immediate) {
     return function() {
       const args = arguments;
-      const later = function() {
+      const later = () => {
         method.tID = null;
         if (!immediate) {
           method.apply(context, args);
