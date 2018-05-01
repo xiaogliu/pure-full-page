@@ -5,7 +5,6 @@ class PureFullPage {
   constructor(options) {
     // 默认配置
     const defaultOptions = {
-      container: '#pureFullPage',
       isShowNav: true,
       delay: 150,
       definePages: () => {},
@@ -16,7 +15,7 @@ class PureFullPage {
     // 将用户自定义函数绑定到实例 this
     this.options.definePages = this.options.definePages.bind(this);
     // 获取翻页容器
-    this.container = document.querySelector(this.options.container);
+    this.container = document.querySelector('#pureFullPage');
     // 获取总页数，创建右侧点导航时用
     this.pages = document.querySelectorAll('.page');
     this.pagesNum = this.pages.length;
@@ -80,7 +79,7 @@ class PureFullPage {
     // 添加初始样式
     this.navDots[0].classList.add('active');
 
-    // 添加点式导航击事件
+    // 添加点式导航点击事件
     this.navDots.forEach((el, i) => {
       utils.addHandler(el, 'click', () => {
         // 页面跳转
@@ -123,13 +122,13 @@ class PureFullPage {
     // 向下滚动，delta < 表示向下滚动，且只有页面底部还有内容时才能滚动
     if (
       delta < 0 &&
-      this.container.offsetTop > -(this.viewHeight * (this.pagesNum - 2) + 1)
+      -this.container.offsetTop <= this.viewHeight * (this.pagesNum - 2)
     ) {
       this.goDown();
     }
 
     // 向上滚动，delta > 0，且页面顶部还有内容时才能滚动
-    if (delta > 0 && this.container.offsetTop < -(this.viewHeight - 1)) {
+    if (delta > 0 && -this.container.offsetTop >= this.viewHeight) {
       this.goUp();
     }
   }
