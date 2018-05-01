@@ -101,11 +101,6 @@ class PureFullPage {
     // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越大表示超出顶部部分越少
     this.currentPosition = this.currentPosition + this.viewHeight;
 
-    // 当 currentPosition = 0 时，表示第一个页面的顶部与整个页面顶部处在相同位置，此时不允许继续向上滚动
-    if (this.currentPosition > 0) {
-      this.currentPosition = 0;
-    }
-
     this.turnPage(this.currentPosition);
     this.changeNavStyle(this.currentPosition);
     // 处理用户自定义函数
@@ -114,12 +109,6 @@ class PureFullPage {
   goDown() {
     // 重新指定当前页面距视图顶部的距离 currentPosition，实现全屏滚动，currentPosition 为负值，越小表示超出顶部部分越多
     this.currentPosition = this.currentPosition - this.viewHeight;
-
-    // 当 currentPosition =  -(this.viewHeight * (this.pagesNum - 1) 时，表示最后一个页面的顶部与整个页面顶部处在相同位置
-    // 此时不允许继续向下滚动
-    if (this.currentPosition < -(this.viewHeight * (this.pagesNum - 1))) {
-      this.currentPosition = -(this.viewHeight * (this.pagesNum - 1));
-    }
 
     this.turnPage(this.currentPosition);
     this.changeNavStyle(this.currentPosition);
@@ -134,13 +123,13 @@ class PureFullPage {
     // 向下滚动，delta < 表示向下滚动，且只有页面底部还有内容时才能滚动
     if (
       delta < 0 &&
-      this.container.offsetTop > -(this.viewHeight * (this.pagesNum - 1))
+      this.container.offsetTop > -(this.viewHeight * (this.pagesNum - 2) + 1)
     ) {
       this.goDown();
     }
 
     // 向上滚动，delta > 0，且页面顶部还有内容时才能滚动
-    if (delta > 0 && this.container.offsetTop < 0) {
+    if (delta > 0 && this.container.offsetTop < -(this.viewHeight - 1)) {
       this.goUp();
     }
   }
