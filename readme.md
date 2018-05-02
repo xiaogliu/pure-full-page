@@ -1,5 +1,6 @@
 ![license](https://img.shields.io/packagist/l/doctrine/orm.svg)
 ![issues/PRs](https://img.shields.io/badge/issues%2FPRs-welcome-brightgreen.svg)
+![GitHub release](https://img.shields.io/github/release/xiaogliu/pure_full_page.svg)
 
 通过原生 JS 编写的全屏滚动插件：兼容 IE 10+、手机触屏，Mac 触摸板优化，支持自定义页面动画，gzip 文件只有 2KB。
 
