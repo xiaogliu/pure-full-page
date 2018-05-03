@@ -85,7 +85,7 @@ new PureFullPage({
 
 其中：
 
-* `delay` 截流/间隔函数延迟时间，默认 150 ms，建议再 100 ～ 200 之间。
+* `delay` 截流/间隔函数延迟时间，默认 900 ms，为了兼容 Mac 触控板，这个值最好大于 900ms。
 
 * `isShowNav` 控制是否显示右侧导航，Boolean 类型，默认为 `true`，设为 `false` 则不显示；
 
