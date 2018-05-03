@@ -77,7 +77,7 @@ new PureFullPage().init();
 ```js
 // 创建实例并初始化
 new PureFullPage({
-  delay: 150,
+  delay: 900,
   isShowNav: true,
   definePages: addAnimation,
 }).init();
