@@ -5,7 +5,7 @@ export default class PureFullPage {
     // 默认配置
     const defaultOptions = {
       isShowNav: true,
-      delay: 150,
+      delay: 900,
       definePages: () => {},
     };
     utils.polyfill();
@@ -149,12 +149,7 @@ export default class PureFullPage {
       this.createNav();
     }
     // 设置截流函数
-    let handleMouseWheel = utils.throttle(
-      this.scrollMouse,
-      this,
-      this.DELAY,
-      true,
-    );
+    let handleMouseWheel = utils.throttle(this.scrollMouse, this, this.DELAY);
 
     // 鼠标滚轮监听，火狐鼠标滚动事件不同其他
     if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {

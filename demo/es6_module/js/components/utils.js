@@ -24,21 +24,15 @@ export default {
     }, delay);
   },
   // 截流函数，method 回调函数，context 上下文，delay 延迟函数，
-  // immediate 传入 true 表示在 delay 开始时执行回调函数
-  throttle(method, context, delay, immediate) {
+  throttle(method, context, delay) {
+    let wait = false;
     return function() {
-      const args = arguments;
-      const later = () => {
-        method.tID = null;
-        if (!immediate) {
-          method.apply(context, args);
-        }
-      };
-      const callNow = immediate && !method.tID;
-      clearTimeout(method.tID);
-      method.tID = setTimeout(later, delay);
-      if (callNow) {
-        method.apply(context, args);
+      if (!wait) {
+        method.apply(context, arguments);
+        wait = true;
+        setTimeout(() => {
+          wait = false;
+        }, delay);
       }
     };
   },
