@@ -6,7 +6,7 @@ class PureFullPage {
     // 默认配置
     const defaultOptions = {
       isShowNav: true,
-      delay: 1200,
+      delay: 1000,
       definePages: () => {},
     };
     utils.polyfill();
