@@ -5,7 +5,7 @@ export default class PureFullPage {
     // 默认配置
     const defaultOptions = {
       isShowNav: true,
-      delay: 900,
+      delay: 1200,
       definePages: () => {},
     };
     utils.polyfill();

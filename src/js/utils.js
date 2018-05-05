@@ -26,7 +26,7 @@ const utils = {
   // 截流函数，method 回调函数，context 上下文，delay 延迟函数，
   throttle(method, context, delay) {
     let wait = false;
-    return function() {
+    return function () {
       if (!wait) {
         method.apply(context, arguments);
         wait = true;
