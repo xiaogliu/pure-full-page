@@ -92,7 +92,7 @@ class PureFullPage {
         this.navDots.forEach(el => {
           utils.deleteClassName(el, 'active');
         });
-        event.target.classList.add('active');
+        el.classList.add('active');
       });
     });
   }
