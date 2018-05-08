@@ -3,6 +3,19 @@
   justify-content: center;
   align-items: center;
 }
+
 .page p {
   font-size: 66px;
+}
+
+.page:nth-child(1) {
+  background: lightpink no-repeat center/cover;
+}
+
+.page:nth-child(2) {
+  background: lightgreen no-repeat center/cover;
+}
+
+.page:nth-child(3) {
+  background: lightskyblue no-repeat center/cover;
 }

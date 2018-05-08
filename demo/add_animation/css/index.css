@@ -3,11 +3,25 @@
   justify-content: center;
   align-items: center;
 }
+
 .page p {
   transform: scale(0);
   font-size: 88px;
   transition: transform 1s ease-out;
 }
+
 .page p.fade-in {
   transform: scale(1);
+}
+
+.page:nth-child(1) {
+  background: lightpink no-repeat center/cover;
+}
+
+.page:nth-child(2) {
+  background: lightgreen no-repeat center/cover;
+}
+
+.page:nth-child(3) {
+  background: lightskyblue no-repeat center/cover;
 }

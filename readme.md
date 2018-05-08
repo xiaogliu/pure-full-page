@@ -59,9 +59,28 @@ pureFullPage 的 JS 和 CSS 压缩后的文件在 `dist` 目录下，源文件�
 
 * ES6 模块化引入
 
-npm package 开发中，敬请期待。。。
+1）安装 npm package：
 
-> 不闲麻烦，可以将 `src` 目录下的源文件手动引入项目，在 demo/es6_moudle 中已做模块化处理...
+```bash
+# 这里使用 yarn，也可以使用 npm 安装
+yarn add pure-full-page
+```
+
+2）引入 js 和 css 文件
+
+需要注意的是 css 文件需要单独引入。
+
+```js
+// css 文件需单独引入
+import 'pure-full-page/lib/pureFullPage.min.css';
+import PureFullPage from 'pure-full-page';
+```
+
+> 但实际上，css 文件中大部分代码是定义导航（右侧轮播点）样式，如果你有自定义导航的需求，完全可以自己复制 `src/css/pureFullPage.scss` 到自己项目中，然后重写自己的导航样式，而不是通过覆盖的方式自定义样式。如果这样的话，就不需要 `import 'pure-full-page/lib/pureFullPage.min.css';` 了
+
+* 其他说明
+
+最开始在 `pureFullPage.min.css` 中定义了页面背景，但考虑到在使用过程中往往都会自定义背景，为了减少冗余代码，没在插件的 css 中设置背景，所以使用过程中记得自己设置。
 
 ### 3）新建 pureFullPage 实例并初始化
 
@@ -115,3 +134,33 @@ let addAnimation = function() {
 ## License
 
 MIT
+
+## 再开发
+
+如果你想基于该项目进行二次开发，可以了解下下面内容：
+
+* 目录
+
+  .  
+   |-- demo &nbsp;  
+   | &nbsp;&nbsp;&nbsp; |-- add_animation &nbsp;&nbsp; # 带动画的 demo  
+   | &nbsp;&nbsp;&nbsp; |-- simple &nbsp;&nbsp; # 最简 demo  
+   |-- dist &nbsp;&nbsp; # 压缩后的生产代码  
+   |-- lib &nbsp;&nbsp; # npm package 使用的源代码，遵循 CommonJS 规范  
+   |-- src &nbsp;&nbsp; # 源代码
+
+* 开发
+
+1）clone 本仓库到本地
+
+2）安装依赖
+
+3）开发过程中通过 gulp 进行管理
+
+```bash
+# 开发过程监听 `src` 目录下文件的变化，有变化更新 dist 下面的文件
+gulp watch
+
+# 手动生成新的 dist 下面的文件
+gulp build
+```

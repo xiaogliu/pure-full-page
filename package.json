@@ -1,8 +1,8 @@
 {
-  "name": "pure_full_page",
-  "version": "1.0.0",
-  "description": "full page scroll developed by js",
-  "main": "index.js",
+  "name": "pure-full-page",
+  "version": "1.0.2",
+  "description": "Full page scroll developed by pure JavaScript",
+  "main": "./lib/pureFullPage.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "gulp watch",
