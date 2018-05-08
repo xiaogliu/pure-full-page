@@ -2,7 +2,7 @@
 ![issues/PRs](https://img.shields.io/badge/issues%2FPRs-welcome-brightgreen.svg)
 ![GitHub release](https://img.shields.io/github/release/xiaogliu/pure_full_page.svg)
 
-原生 JS 编写的全屏滚动插件：兼容 IE 10+、手机触屏，Mac 触摸板优化，可自定义页面动画，gzip 文件只有 2.14KB。
+原生 JS 编写的全屏滚动插件：兼容 IE 10+、手机触屏，Mac 触摸板优化，可自定义页面动画，gzip 文件 < 2.1KB。
 
 查看 [DEMO](https://xiaogliu.github.io/pure_full_page/index.html)；下载 [文件](https://github.com/xiaogliu/pure_full_page/releases)
 
