@@ -159,8 +159,8 @@ MIT
 
 ```bash
 # 开发过程监听 `src` 目录下文件的变化，有变化更新 dist 下面的文件
-gulp watch
+npm run watch
 
 # 手动生成新的 dist 下面的文件
-gulp build
+npm run build
 ```
