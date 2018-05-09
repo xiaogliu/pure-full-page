@@ -132,7 +132,7 @@ class PureFullPage {
     }
   }
   // 触屏事件
-  handleTouchEnd(event) {
+  touchEnd(event) {
     let endY = event.changedTouches[0].pageY;
     if (endY - this.startY < 0) {
       // 手指向上滑动，对应页面向下滚动
@@ -150,7 +150,7 @@ class PureFullPage {
       this.createNav();
     }
     // 设置截流函数
-    let handleMouseWheel = utils.throttle(this.scrollMouse, this, this.DELAY);
+    const handleMouseWheel = utils.throttle(this.scrollMouse, this, this.DELAY);
 
     // 鼠标滚轮监听，火狐鼠标滚动事件不同其他
     if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
@@ -159,12 +159,12 @@ class PureFullPage {
       document.addEventListener('DOMMouseScroll', handleMouseWheel);
     }
 
-    // 手指接触屏幕
+    // 手机触屏屏幕
     document.addEventListener('touchstart', event => {
       this.startY = event.touches[0].pageY;
     });
-    //手指离开屏幕
-    document.addEventListener('touchend', this.handleTouchEnd.bind(this));
+    const handleTouchEnd = utils.throttle(this.touchEnd, this, 500);
+    document.addEventListener('touchend', handleTouchEnd);
     document.addEventListener('touchmove', event => {
       event.preventDefault();
     });
