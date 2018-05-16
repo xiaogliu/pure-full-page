@@ -10,11 +10,10 @@ const utils = {
 
       // 第一次调用使用
       return event.wheelDelta;
-    } else {
-      // 兼容火狐
-      this.getWheelDelta = event => -event.detail;
-      return -event.detail;
     }
+    // 兼容火狐
+    this.getWheelDelta = event => -event.detail;
+    return -event.detail;
   },
   // 防抖动函数，method 回调函数，context 上下文，event 传入的时间，delay 延迟函数
   debounce(method, context, event, delay) {
@@ -26,9 +25,9 @@ const utils = {
   // 截流函数，method 回调函数，context 上下文，delay 延迟函数，
   throttle(method, context, delay) {
     let wait = false;
-    return function () {
+    return function(...args) {
       if (!wait) {
-        method.apply(context, arguments);
+        method.apply(context, args);
         wait = true;
         setTimeout(() => {
           wait = false;
@@ -44,17 +43,17 @@ const utils = {
   },
   // polyfill Object.assign
   polyfill() {
-    if (typeof Object.assign != 'function') {
+    if (typeof Object.assign !== 'function') {
       Object.defineProperty(Object, 'assign', {
-        value: function assign(target, varArgs) {
+        value: function assign(target) {
           if (target == null) {
             throw new TypeError('Cannot convert undefined or null to object');
           }
-          let to = Object(target);
+          const to = Object(target);
           for (let index = 1; index < arguments.length; index++) {
-            let nextSource = arguments[index];
+            const nextSource = arguments[index];
             if (nextSource != null) {
-              for (let nextKey in nextSource) {
+              for (const nextKey in nextSource) {
                 if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
                   to[nextKey] = nextSource[nextKey];
                 }

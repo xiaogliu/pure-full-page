@@ -2,7 +2,10 @@
   "name": "pure-full-page",
   "version": "1.0.5",
   "description": "Full page scroll developed by pure JavaScript",
-  "keywords": ["full page scroll", "ES6"],
+  "keywords": [
+    "full page scroll",
+    "ES6"
+  ],
   "main": "./lib/pureFullPage.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -22,13 +25,22 @@
   "dependencies": {},
   "devDependencies": {
     "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.3",
     "babel-preset-es2015": "^6.24.1",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-prettier": "^2.6.0",
+    "eslint-plugin-react": "^7.7.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.1",
     "gulp-clean-css": "^3.9.3",
     "gulp-concat": "^2.6.1",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^4.0.1",
-    "gulp-uglify": "^3.0.0"
+    "gulp-uglify": "^3.0.0",
+    "prettier": "^1.12.1"
   }
 }

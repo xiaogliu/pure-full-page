@@ -1,9 +1,9 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   // 添加交互动画,不能使用箭头函数，要引用实例中的 this
-  let addAnimation = function() {
+  const addAnimation = function() {
     // i 表示每次滑动将要进入的页面的索引，可以通过 this.pages[i] 获取当前页面
     // 取得将要进入页面后便可以做进一步操作，比如，添加动画
-    let i = -(this.currentPosition / this.viewHeight);
+    const i = -(this.currentPosition / this.viewHeight);
 
     // 为将要进入页面添加动画
     document.querySelector('.fade-in').classList.remove('fade-in');
@@ -16,6 +16,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }).init();
 });
 
-window.addEventListener('load', () => {
+window.addEventListener('load', function () {
   document.querySelector('p').classList.add('fade-in');
 });

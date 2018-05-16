@@ -33,7 +33,7 @@ class PureFullPage {
   // window resize 时重新获取位置
   getNewPosition() {
     this.viewHeight = document.documentElement.clientHeight;
-    this.container.style.height = this.viewHeight + 'px';
+    this.container.style.height = `${this.viewHeight}px`;
     let activeNavIndex;
     this.navDots.forEach((e, i) => {
       if (e.classList.contains('active')) {
@@ -49,7 +49,7 @@ class PureFullPage {
   }
   // 页面跳转
   turnPage(height) {
-    this.container.style.top = height + 'px';
+    this.container.style.top = `${height}px`;
   }
   // 随页面滚动改变样式
   changeNavStyle(height) {
@@ -58,7 +58,7 @@ class PureFullPage {
         utils.deleteClassName(el, 'active');
       });
 
-      let i = -(height / this.viewHeight);
+      const i = -(height / this.viewHeight);
       this.navDots[i].classList.add('active');
     }
   }
@@ -81,7 +81,7 @@ class PureFullPage {
 
     // 添加点式导航点击事件
     this.navDots.forEach((el, i) => {
-      el.addEventListener('click', event => {
+      el.addEventListener('click', () => {
         // 页面跳转
         this.currentPosition = -(i * this.viewHeight);
         // 处理用户自定义函数
@@ -123,7 +123,7 @@ class PureFullPage {
   }
   // 鼠标滚动逻辑（全屏滚动关键逻辑）
   scrollMouse(event) {
-    let delta = utils.getWheelDelta(event);
+    const delta = utils.getWheelDelta(event);
     // delta < 0，鼠标往前滚动，页面向下滚动
     if (delta < 0) {
       this.goDown();
@@ -133,7 +133,7 @@ class PureFullPage {
   }
   // 触屏事件
   touchEnd(event) {
-    let endY = event.changedTouches[0].pageY;
+    const endY = event.changedTouches[0].pageY;
     if (endY - this.startY < 0) {
       // 手指向上滑动，对应页面向下滚动
       this.goDown();
@@ -144,7 +144,7 @@ class PureFullPage {
   }
   // 初始化函数
   init() {
-    this.container.style.height = this.viewHeight + 'px';
+    this.container.style.height = `${this.viewHeight}px`;
     // 创建点式导航
     if (this.options.isShowNav) {
       this.createNav();
