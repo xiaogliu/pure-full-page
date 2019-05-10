@@ -6,11 +6,11 @@ body {
 }
 
 /* pure full page 样式 */
-
 #pureFullPage {
   position: relative;
   top: 0;
   transition: all 1000ms ease;
+  touch-action: none;
   .page {
     width: 100%;
     height: 100%;
