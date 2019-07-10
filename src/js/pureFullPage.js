@@ -29,6 +29,11 @@ class PureFullPage {
     this.DELAY = this.options.delay;
     // 检测滑动方向，只需要检测纵坐标
     this.startY = undefined;
+
+    /**
+     * 初始化
+     */
+    this.init();
   }
   // window resize 时重新获取位置
   getNewPosition() {

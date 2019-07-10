@@ -86,7 +86,7 @@ import PureFullPage from 'pure-full-page';
 
 ```js
 // 创建实例并初始化
-new PureFullPage().init();
+new PureFullPage();
 ```
 
 ### 4）自定义参数
@@ -99,7 +99,7 @@ new PureFullPage({
   delay: 1000,
   isShowNav: true,
   definePages: addAnimation,
-}).init();
+});
 ```
 
 其中：
@@ -159,7 +159,7 @@ MIT
 
 ```bash
 # 开发过程监听 `src` 目录下文件的变化，有变化更新 dist 下面的文件
-npm run watch
+npm run start
 
 # 手动生成新的 dist 下面的文件
 npm run build

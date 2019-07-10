@@ -9,7 +9,7 @@
   "main": "./lib/pureFullPage.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "gulp watch",
+    "start": "gulp watch",
     "build": "gulp build"
   },
   "repository": {
