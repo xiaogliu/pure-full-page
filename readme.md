@@ -4,7 +4,7 @@
 
 Full-screen scrolling plugin written in native JS: compatible with IE 10+, mobile phone touch screen, Mac touch pad optimization, customizable page animation, gzip file <2.15KB.
 
-[DEMO](https://xiaogliu.github.io/pure-full-page/index.html); download [file](https://github.com/xiaogliu/pure-full-page/releases)
+[DEMO](https://xiaogliu.github.io/pure-full-page/index.html); download [file](https://github.com/xiaogliu/pure-full-page/releases); [中文文档](https://github.com/xiaogliu/pure-full-page/blob/master/readme-zh_CN.md)
 
 ## Why I write it
 
@@ -33,11 +33,7 @@ In contrast, this plugin in native JS has the following benefits:
 </div>
 ```
 
-其中，id 为 `pureFullPage` 的 div 是所有滚动页面的容器，class 为 `page` 的 div 为具体页面的容器。
-
-页面容器 id 必须为 `pureFullPage`，具体页面 class 必须包含 `page`，因为 css 会根据 `#pureFullPage` 和 `.page` 设置样式。
-
-Among them, the div with id `pureFullPage` is the container for all scrolling pages, and the div with class `page` is the container for specific pages.
+The div with id `pureFullPage` is the container for all scrolling pages, and the div with class `page` is the container for specific pages.
 
 The page container id must be `pureFullPage`, and the specific page class must contain `page`, because css will set the style according to `#pureFullPage` and `.page`.
 
@@ -151,19 +147,19 @@ If you want to develop full scroll page plugin based on this project, the follow
 
 - develop
 
-1）clone this project to your computer
+1) clone this project to your computer
 
 ```bash
 git clone git@github.com:xiaogliu/pure-full-page.git
 ```
 
-2）Install dependencies
+2) Install dependencies
 
 ```bash
 npm install
 ```
 
-3）Managed by gulp during development
+3) Managed by gulp during development
 
 ```bash
 # The process of sending monitors the changes of files in the src directory, and updates the files under dist if there are changes
