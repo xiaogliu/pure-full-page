@@ -1,36 +1,42 @@
-import babel from 'gulp-babel';
-import gulp from 'gulp';
-import uglify from 'gulp-uglify';
-import concat from 'gulp-concat';
-import cleanCSS from 'gulp-clean-css';
-import sass from 'gulp-sass';
-import rename from 'gulp-rename';
+import gulp from "gulp";
+import babel from "gulp-babel";
+import uglify from "gulp-uglify";
+import concat from "gulp-concat";
+import cleanCSS from "gulp-clean-css";
+import sass from "gulp-sass";
+import rename from "gulp-rename";
 
-const srcJSFiles = ['./src/js/utils.js', './src/js/pureFullPage.js'];
+const paths = {
+  styles: {
+    src: "./src/css/pureFullPage.scss",
+    dest: "./dist",
+  },
+  scripts: {
+    src: ["./src/js/utils.js", "./src/js/pureFullPage.js"],
+    dest: "./dist",
+  },
+};
 
-gulp.task('transferJS', () => {
+const transferCSS = () =>
   gulp
-    .src(srcJSFiles)
-    .pipe(concat('pureFullPage.min.js'))
+    .src(paths.styles.src)
+    .pipe(sass().on("error", sass.logError))
+    .pipe(cleanCSS({ compatibility: "*" }))
+    .pipe(rename("pureFullPage.min.css"))
+    .pipe(gulp.dest(paths.styles.dest));
+
+const transferJS = () =>
+  gulp
+    .src(paths.scripts.src)
+    .pipe(concat("pureFullPage.min.js"))
     .pipe(babel())
     .pipe(uglify())
-    .pipe(gulp.dest('./dist'));
-});
+    .pipe(gulp.dest(paths.scripts.dest));
 
-gulp.task('transferCSS', () => {
-  gulp
-    .src('./src/css/pureFullPage.scss')
-    .pipe(sass().on('error', sass.logError))
-    .pipe(cleanCSS({ compatibility: '*' }))
-    .pipe(rename('pureFullPage.min.css'))
-    .pipe(gulp.dest('./dist'));
-});
+export const watch = () => {
+  gulp.watch(paths.styles.src, transferCSS);
+  gulp.watch(paths.scripts.src, transferJS);
+};
 
-// 监控
-gulp.task('watch', function() {
-  gulp.watch(srcJSFiles, ['transferJS']);
-  gulp.watch('./src/css/pureFullPage.scss', ['transferCSS']);
-});
-
-// 打包发布
-gulp.task('build', ['transferJS', 'transferCSS']);
+// build files
+export const build = gulp.parallel(transferCSS, transferJS);

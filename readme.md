@@ -163,7 +163,7 @@ npm install
 
 ```bash
 # The process of sending monitors the changes of files in the src directory, and updates the files under dist if there are changes
-npm run start
+npm run watch
 
 # Manually generate the files under the new dist
 npm run build
