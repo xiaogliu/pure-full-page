@@ -2,28 +2,28 @@
 ![issues/PRs](https://img.shields.io/badge/issues%2FPRs-welcome-brightgreen.svg)
 ![GitHub release](https://img.shields.io/github/release/xiaogliu/pure_full_page.svg)
 
-原生 JS 编写的全屏滚动插件：兼容 IE 10+、手机触屏，Mac 触摸板优化，可自定义页面动画，gzip 文件 < 2.15KB。
+Full-screen scrolling plugin written in native JS: compatible with IE 10+, mobile phone touch screen, Mac touch pad optimization, customizable page animation, gzip file <2.15KB.
 
-查看 [DEMO](https://xiaogliu.github.io/pure_full_page/index.html)；下载 [文件](https://github.com/xiaogliu/pure_full_page/releases)
+[DEMO](https://xiaogliu.github.io/pure-full-page/index.html); download [file](https://github.com/xiaogliu/pure-full-page/releases); [中文文档](https://github.com/xiaogliu/pure-full-page/blob/master/readme-zh_CN.md)
 
-## 前面的话
+## Why I write it
 
-现在已经有很多全屏滚动插件了，比如著名的 [fullPage](https://github.com/alvarotrigo/fullPage.js)，那为什么还要自己造轮子呢？
+There are already many full-screen scrolling plugins, such as the famous [fullPage](https://github.com/alvarotrigo/fullPage.js), Why do I write another one?
 
-首先，现有轮子有以下问题：
+The existing plug-ins have the following problems:
 
-* 首先，最大的问题是最流行的几个插件都依赖 jQuery，这意味着在使用 React 或者 Vue 的项目中使用是一件十分蛋疼的事：我只需要一个全屏滚动功能，却还需要把 jQuery 引入，有种杀鸡使用宰牛刀的感觉；
-* 其次，现有的很多全屏滚动插件功能往往都十分丰富，这在前几年是优势，但现在（2018-4）可以看作是劣势：前端开发已经发生了很大变化，其中很重要的一个变化是 ES6 原生支持模块化开发，模块化开发最大的特点是一个模块最好只专注做好一件事，然后再拼成一个完整的系统，从这个角度看，大而全的插件有悖模块化开发的原则。
+- First of all, the biggest problem is that the most popular plugins all rely on jQuery, which means that it is a very painful thing to use in projects that use React or Vue: I only need a full-screen scrolling plugin, but I also need to import jQuery. That's ridiculous!
+- Secondly, many existing full-screen scrolling plugins have too much features, which was an advantage in the past few years, but now (2018-4) I think it's a disadvantage: front-end development has undergone great changes, of which the most important one change is that ES6 natively supports modular development. The biggest feature of modular development is that a module is best to focus on only one feature, and use many small modules build a complete system. From this perspective, a large and feature-rich plugin is contradictory the principle of modular development.
 
-对比之下，通过原生语言造轮子有以下好处：
+In contrast, this plugin in native JS has the following benefits:
 
-* 使用原生语言编写的插件，自身不会受依赖的插件的使用场景而影响自身的使用（依赖 jQuery 的插件不适合在单页面应用（react/vue）中使用），所以使用上更加灵活；
-* 搭配模块化开发，使用原生语言开发的插件可以只专注一个功能，所以代码量可以很少，方便开发和维护；
-* 最后，随着 JS/CSS/HTML 的发展以及浏览器不断迭代更新，现在使用原生语言编写插件的开发成本越来越低，那为什么不呢？
+- Plugins written in native languages will not be affected by the usage scenarios of dependent plugins (plugins that depend on jQuery are not suitable for use in single-page applications (react/vue)), so they are more flexible in use;
+- With modular development, plugins developed in native languages can focus on only one function, so the amount of code can be small, which is convenient for development and maintenance;
+- Finally, with the updating of JS/CSS/HTML and browsers, the cost of writing plugins in native languages is getting lower and lower, so why not?
 
-## 使用方法
+## Instructions
 
-### 1） 创建 html，结构如下
+### 1) Create `html` with the following structure
 
 ```html
 <div id="pureFullPage">
@@ -33,134 +33,136 @@
 </div>
 ```
 
-其中，id 为 `pureFullPage` 的 div 是所有滚动页面的容器，class 为 `page` 的 div 为具体页面的容器。
+The div with id `pureFullPage` is the container for all scrolling pages, and the div with class `page` is the container for specific pages.
 
-页面容器 id 必须为 `pureFullPage`，具体页面 class 必须包含 `page`，因为 css 会根据 `#pureFullPage` 和 `.page` 设置样式。
+The page container id must be `pureFullPage`, and the specific page class must contain `page`, because css will set the style according to `#pureFullPage` and `.page`.
 
-### 2）引入 pureFullPage 的 JS 和 CSS 文件
+### 2) Import pureFullPage's JS and CSS files
 
-pureFullPage 的 JS 和 CSS 压缩后的文件在 `dist` 目录下，源文件在 `src` 目录下。
+The JS and CSS compressed files of pureFullPage are in the `dist` directory, and the source files are in the `src` directory.
 
-* 传统引入方式
+- import by path
 
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     ...
-    <link rel="stylesheet" href="youtpath/pureFullPage.min.css">
-</head>
-<body>
+    <link rel="stylesheet" href="youtpath/pureFullPage.min.css" />
+  </head>
+  <body>
     ...
     <script src="youtpath/pureFullPage.min.js"></script>
-</body>
+  </body>
 </html>
 ```
 
-* ES6 模块化引入
+- import by ES6 modular
 
-1）安装 npm package：
+1. install npm package：
 
 ```bash
-# 这里使用 yarn，也可以使用 npm 安装
-yarn add pure-full-page
+npm install pure-full-page
 ```
 
-2）引入 js 和 css 文件
+2. import js and css file
 
-需要注意的是 css 文件需要单独引入。
+Note: The css file needs to be imported separately.
 
 ```js
-// css 文件需单独引入
-import 'pure-full-page/lib/pureFullPage.min.css';
-import PureFullPage from 'pure-full-page';
+// css imported separately
+import "pure-full-page/lib/pureFullPage.min.css";
+import PureFullPage from "pure-full-page";
 ```
 
-> 但实际上，css 文件中大部分代码是定义导航（右侧轮播点）样式，如果你有自定义导航的需求，完全可以自己复制 `src/css/pureFullPage.scss` 到自己项目中，然后重写自己的导航样式，而不是通过覆盖的方式自定义样式。如果这样的话，就不需要 `import 'pure-full-page/lib/pureFullPage.min.css';` 了
+> But in fact, most of the code in the css file is to define the style of navigation (rotation point on the right). If you have the need for custom navigation, you can copy `src/css/pureFullPage.scss` to your own project, and then rewrite your own navigation style instead of customizing the style by overwriting. If this is the case, you do not need to `import 'pure-full-page/lib/pureFullPage.min.css';`.
 
-* 其他说明
+- Other instructions
 
-最开始在 `pureFullPage.min.css` 中定义了页面背景，但考虑到在使用过程中往往都会自定义背景，为了减少冗余代码，没在插件的 css 中设置背景，所以使用过程中记得自己设置。
+At first, the page background was defined in `pureFullPage.min.css`, but considering that the background is often customized during use, in order to reduce redundant code, the background is not set in the CSS of the plugin, so if you need you should write by yourself.
 
-### 3）新建 pureFullPage 实例并初始化
+### 3) Create a new pureFullPage instance and initialize
 
 ```js
-// 创建实例并初始化
-new PureFullPage().init();
+// Create a new pureFullPage instance and initialize
+new PureFullPage();
 ```
 
-### 4）自定义参数
+### 4) Custom parameters
 
-实例化 pureFullPage 时接受一个对象作为参数，可以控制是否显示右侧导航（移动端往往不需要右侧导航）及自定义页面动画，示例代码如下：
+When instantiating pureFullPage, an object is accepted as a parameter, which can control whether to display the right navigation (It often does not need the right navigation on mobile) and custom page animation. The sample code is as follows:
 
 ```js
-// 创建实例并初始化
 new PureFullPage({
-  delay: 1000,
   isShowNav: true,
   definePages: addAnimation,
-}).init();
+});
 ```
 
-其中：
+| param name    | type     | default value | definition                                                                                                                                                                                                       |
+| ------------- | -------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `isShowNav`   | boolean  | `true`        | controls whether to display the right navigation                                                                                                                                                                 |
+| `definePages` | function | `() => {}`    | This function will be triggered every time the page scrolls. It is mainly used to **get the page element to be entered**, and get the page element, you can perform related operations, generally add animation. |
 
-* `delay` 截流/间隔函数延迟时间，默认 1000 ms，为了兼容 Mac 触控板，这个值最好大于 1000ms。
 
-* `isShowNav` 控制是否显示右侧导航，Boolean 类型，默认为 `true`，设为 `false` 则不显示；
-
-* `definePages` 是 Function 类型，默认为空函数（什么都不操作）。这个函数会在页面每次滚动时触发，主要用来**获取将要进入的页面元素**，拿到页面元素，就可以进行相关操作了，一般是添加动画。
-
-`definePages` 需要特别说明下，若需要自定义，则**定义时不能使用箭头函数**，因为自定义函数内部 `this` 在 `pureFullPage` 实现时绑定到了实例本身，方便获取将要进入的页面元素，见下面为将要进入的页面添加动画的示例代码：
+> If you need to customize the function of `definePages`, when define it that **its definition cannot be used arrow function**, because the custom function `this` is bound to the instance itself during the implementation of `pureFullPage`, which is convenient to get the entered page, see the following sample code for adding animation to the page that under `pureFullPage`:
 
 ```js
-// 不能使用箭头函数，要引用实例中的 this
+// do not use arrow function
 let addAnimation = function() {
-  // i 表示每次滑动将要进入的页面的索引，可以通过 this.pages[i] 获取当前页面元素
-  // 取得将要进入的页面元素后便可以做进一步操作
+  // i represents the index of the page that will be entered every time you slide, you can get the current page element through this.pages[i]
   let i = -(this.currentPosition / this.viewHeight);
 
-  // 为将要进入页面添加动画
-  document.querySelector('.fade-in').classList.remove('fade-in');
-  this.pages[i].querySelector('p').classList.add('fade-in');
+  // Add animation to the page to be entered
+  document.querySelector(".fade-in").classList.remove("fade-in");
+  this.pages[i].querySelector("p").classList.add("fade-in");
 };
 ```
 
-> 添加动画的完整代码在 `demo/add_animation/` 目录下
+> The complete code for adding animations is in the directory of `demo/add_animation/`
 
-## 了解更多
+## Read more
 
-可查看 [用 ES6 写全屏滚动插件](https://xiaogliu.github.io/2018/04/28/develop-full-page-scroll-by-es6/) 了解详细开发过程。
+Please check [Develop full scroll page by ES6](https://xiaogliu.github.io/2018/04/28/develop-full-page-scroll-by-es6/) to know the details of developing this plugin (**Chinese**)。
 
 ## License
 
 MIT
 
-## 再开发
+## re-develop
 
-如果你想基于该项目进行二次开发，可以了解下下面内容：
+If you want to develop full scroll page plugin based on this project, the following info maybe help:
 
-* 目录
+- Project structure
 
   .  
    |-- demo &nbsp;  
-   | &nbsp;&nbsp;&nbsp; |-- add_animation &nbsp;&nbsp; # 带动画的 demo  
-   | &nbsp;&nbsp;&nbsp; |-- simple &nbsp;&nbsp; # 最简 demo  
-   |-- dist &nbsp;&nbsp; # 压缩后的生产代码  
-   |-- lib &nbsp;&nbsp; # npm package 使用的源代码，遵循 CommonJS 规范  
-   |-- src &nbsp;&nbsp; # 源代码
+   | &nbsp;&nbsp;&nbsp; |-- add_animation &nbsp;&nbsp; # demo with animation  
+   | &nbsp;&nbsp;&nbsp; |-- simple &nbsp;&nbsp; # simplest demo  
+   |-- dist &nbsp;&nbsp; # compressed prod code  
+   |-- lib &nbsp;&nbsp; # code used by npm package, CommonJS specification 
+   |-- src &nbsp;&nbsp; # source code
 
-* 开发
+- develop
 
-1）clone 本仓库到本地
-
-2）安装依赖
-
-3）开发过程中通过 gulp 进行管理
+1) clone this project to your computer
 
 ```bash
-# 开发过程监听 `src` 目录下文件的变化，有变化更新 dist 下面的文件
+git clone git@github.com:xiaogliu/pure-full-page.git
+```
+
+2) Install dependencies
+
+```bash
+npm install
+```
+
+3) Managed by gulp during development
+
+```bash
+# The process of sending monitors the changes of files in the src directory, and updates the files under dist if there are changes
 npm run watch
 
-# 手动生成新的 dist 下面的文件
+# Manually generate the files under the new dist
 npm run build
 ```

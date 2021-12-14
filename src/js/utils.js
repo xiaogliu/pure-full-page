@@ -17,31 +17,51 @@ const utils = {
   },
   // 防抖动函数，method 回调函数，context 上下文，event 传入的时间，delay 延迟函数
   // 调用的时候直接执行，注意和 throttle 在使用的时候的区别
-  debounce(method, context, event, delay) {
+  debounceWithParam(method, context, event, delay) {
     clearTimeout(method.tId);
     method.tId = setTimeout(() => {
       method.call(context, event);
     }, delay);
-  },
-  // 截流函数，method 回调函数，context 上下文，delay 延迟函数，
-  // 返回的是一个函数
-  throttle(method, context, delay) {
-    let wait = false;
-    return function(...args) {
-      if (!wait) {
-        method.apply(context, args);
-        wait = true;
-        setTimeout(() => {
-          wait = false;
-        }, delay);
-      }
-    };
   },
   // 删除 类名
   deleteClassName(el, className) {
     if (el.classList.contains(className)) {
       el.classList.remove(className);
     }
+  },
+  // debounce function also can resolve magic mouse continuous trigger
+  // from underscore library
+  debounce(func, wait, immediate) {
+    let timeout, args, context, timestamp, result;
+
+    const later = function() {
+      const last = new Date().getTime() - timestamp;
+      if (last < wait && last >= 0) {
+        timeout = setTimeout(later, wait - last);
+      } else {
+        timeout = null;
+        if (!immediate) {
+          result = func.apply(context, args);
+          if (!timeout)
+            context = args = null;
+        }
+      }
+    };
+
+    return function() {
+      context = this;
+      args = arguments;
+      timestamp = new Date().getTime();
+      const callNow = immediate && !timeout;
+      if (!timeout) {
+        timeout = setTimeout(later, wait);
+      }
+      if (callNow) {
+        result = func.apply(context, args);
+        context = args = null;
+      }
+      return result;
+    };
   },
   // polyfill Object.assign
   polyfill() {

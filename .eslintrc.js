@@ -26,7 +26,7 @@ module.exports = {
     'space-before-function-paren': 0, // 函数定义时括号前面不要有空格
     'no-plusplus': 0, // 禁止使用 ++， ——
     'max-len': 0, // 字符串最大长度
-    'comma-dangle': ["error", 'always-multiline'], // 多行对象字面量项尾总是有逗号
+    'comma-dangle': ['error', 'always-multiline'], // 多行对象字面量项尾总是有逗号
     'func-names': 0, // 函数表达式必须有名字
   },
 };

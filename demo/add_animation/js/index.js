@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // 创建全屏滚动实例，传入动画回调函数，并初始化
   new PureFullPage({
     definePages: addAnimation,
-  }).init();
+  });
 });
 
 window.addEventListener('load', function () {
