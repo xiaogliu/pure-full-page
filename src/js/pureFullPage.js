@@ -45,10 +45,6 @@ class PureFullPage {
     this.currentPosition = -(activeNavIndex * this.viewHeight);
     this.turnPage(this.currentPosition);
   }
-  handleWindowResize(event) {
-    // 设置防抖动函数
-    utils.debounceWithParam(this.getNewPosition, this, event, 500);
-  }
   // 页面跳转
   turnPage(height) {
     this.container.style.top = `${height}px`;
@@ -151,9 +147,9 @@ class PureFullPage {
     if (this.options.isShowNav) {
       this.createNav();
     }
-    const handleMouseWheel = utils.debounce(this.scrollMouse.bind(this), 40, true);
 
     // 鼠标滚轮监听，火狐鼠标滚动事件不同其他
+    const handleMouseWheel = utils.debounce(this.scrollMouse.bind(this), 40, true);
     if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
       document.addEventListener('mousewheel', handleMouseWheel);
     } else {
@@ -164,13 +160,14 @@ class PureFullPage {
     document.addEventListener('touchstart', event => {
       this.startY = event.touches[0].pageY;
     });
-    const handleTouchEnd = utils.throttleWithParam(this.touchEnd, this, 500);
+    const handleTouchEnd = utils.throttle(this.touchEnd, this, 500);
     document.addEventListener('touchend', handleTouchEnd);
     document.addEventListener('touchmove', event => {
       event.preventDefault();
     });
 
     // 窗口尺寸变化时重置位置
-    window.addEventListener('resize', this.handleWindowResize.bind(this));
+    const handleNewPosition = utils.debounce(this.getNewPosition.bind(this), 200);
+    window.addEventListener('resize', handleNewPosition);
   }
 }
