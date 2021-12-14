@@ -1,6 +1,6 @@
 {
   "name": "pure-full-page",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "description": "Full page scroll developed by pure JavaScript",
   "keywords": [
     "full page scroll",
@@ -37,6 +37,7 @@
     "gulp-rename": "^2.0.0",
     "gulp-sass": "^5.0.0",
     "gulp-uglify": "^3.0.2",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "sass": "^1.45.0"
   }
 }

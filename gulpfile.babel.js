@@ -3,8 +3,11 @@ import babel from "gulp-babel";
 import uglify from "gulp-uglify";
 import concat from "gulp-concat";
 import cleanCSS from "gulp-clean-css";
-import sass from "gulp-sass";
 import rename from "gulp-rename";
+import dartSass from 'sass'
+import gulpSass from 'gulp-sass'
+
+const sass = gulpSass(dartSass)
 
 const paths = {
   styles: {
