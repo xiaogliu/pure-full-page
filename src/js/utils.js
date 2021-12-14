@@ -23,6 +23,20 @@ const utils = {
       method.call(context, event);
     }, delay);
   },
+  // 截流函数，method 回调函数，context 上下文，delay 延迟函数，
+  // 返回的是一个函数
+  throttleWithParam(method, context, delay) {
+    let wait = false;
+    return function(...args) {
+      if (!wait) {
+        method.apply(context, args);
+        wait = true;
+        setTimeout(() => {
+          wait = false;
+        }, delay);
+      }
+    };
+  },
   // 删除 类名
   deleteClassName(el, className) {
     if (el.classList.contains(className)) {

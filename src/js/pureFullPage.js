@@ -164,7 +164,7 @@ class PureFullPage {
     document.addEventListener('touchstart', event => {
       this.startY = event.touches[0].pageY;
     });
-    const handleTouchEnd = utils.debounce(this.touchEnd.bind(this), 50, true);
+    const handleTouchEnd = utils.throttleWithParam(this.touchEnd, this, 500);
     document.addEventListener('touchend', handleTouchEnd);
     document.addEventListener('touchmove', event => {
       event.preventDefault();
