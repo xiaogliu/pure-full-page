@@ -94,7 +94,6 @@ When instantiating pureFullPage, an object is accepted as a parameter, which can
 
 ```js
 new PureFullPage({
-  delay: 1000,
   isShowNav: true,
   definePages: addAnimation,
 });
@@ -102,7 +101,6 @@ new PureFullPage({
 
 | param name    | type     | default value | definition                                                                                                                                                                                                       |
 | ------------- | -------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `delay`       | number   | `1000`        | throttle function delay time, milisecond, in order to be compatible with Mac touchpad, this value is preferably greater than 1000                                                                                |
 | `isShowNav`   | boolean  | `true`        | controls whether to display the right navigation                                                                                                                                                                 |
 | `definePages` | function | `() => {}`    | This function will be triggered every time the page scrolls. It is mainly used to **get the page element to be entered**, and get the page element, you can perform related operations, generally add animation. |
 

@@ -6,7 +6,6 @@ class PureFullPage {
     // 默认配置
     const defaultOptions = {
       isShowNav: true,
-      delay: 1000,
       definePages: () => {},
     };
     utils.polyfill();
@@ -25,8 +24,6 @@ class PureFullPage {
     this.viewHeight = document.documentElement.clientHeight;
     // 当前位置，负值表示相对视图窗口顶部向下的偏移量
     this.currentPosition = 0;
-    // 截流/间隔函数延迟时间，毫秒
-    this.DELAY = this.options.delay;
     // 检测滑动方向，只需要检测纵坐标
     this.startY = undefined;
 
@@ -50,7 +47,7 @@ class PureFullPage {
   }
   handleWindowResize(event) {
     // 设置防抖动函数
-    utils.debounce(this.getNewPosition, this, event, this.DELAY);
+    utils.debounceWithParam(this.getNewPosition, this, event, 500);
   }
   // 页面跳转
   turnPage(height) {
@@ -154,8 +151,7 @@ class PureFullPage {
     if (this.options.isShowNav) {
       this.createNav();
     }
-    // 设置截流函数
-    const handleMouseWheel = utils.throttle(this.scrollMouse, this, this.DELAY);
+    const handleMouseWheel = utils.debounce(this.scrollMouse.bind(this), 40, true);
 
     // 鼠标滚轮监听，火狐鼠标滚动事件不同其他
     if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
@@ -168,7 +164,7 @@ class PureFullPage {
     document.addEventListener('touchstart', event => {
       this.startY = event.touches[0].pageY;
     });
-    const handleTouchEnd = utils.throttle(this.touchEnd, this, 500);
+    const handleTouchEnd = utils.debounce(this.touchEnd.bind(this), 50, true);
     document.addEventListener('touchend', handleTouchEnd);
     document.addEventListener('touchmove', event => {
       event.preventDefault();

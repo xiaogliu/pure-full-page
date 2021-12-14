@@ -95,15 +95,12 @@ new PureFullPage();
 ```js
 // 创建实例并初始化
 new PureFullPage({
-  delay: 1000,
   isShowNav: true,
   definePages: addAnimation,
 });
 ```
 
 其中：
-
-* `delay` 截流/间隔函数延迟时间，默认 1000 ms，为了兼容 Mac 触控板，这个值最好大于 1000ms。
 
 * `isShowNav` 控制是否显示右侧导航，Boolean 类型，默认为 `true`，设为 `false` 则不显示；
 
