@@ -140,6 +140,15 @@ class PureFullPage {
       this.goUp();
     }
   }
+
+  handleMouseWheel = null;
+  handleNewPosition = null;
+  handleTouchStart = (event) => {
+    this.startY = event.touches[0].pageY;
+  }
+  handleTouchMove = (event) => {
+    event.preventDefault();
+  }
   // 初始化函数
   init() {
     this.container.style.height = `${this.viewHeight}px`;
@@ -149,25 +158,41 @@ class PureFullPage {
     }
 
     // 鼠标滚轮监听，火狐鼠标滚动事件不同其他
-    const handleMouseWheel = utils.debounce(this.scrollMouse.bind(this), 40, true);
+    this.handleMouseWheel = utils.debounce(this.scrollMouse.bind(this), 40, true);
     if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
-      document.addEventListener('mousewheel', handleMouseWheel);
+      document.addEventListener('mousewheel', this.handleMouseWheel);
     } else {
-      document.addEventListener('DOMMouseScroll', handleMouseWheel);
+      document.addEventListener('DOMMouseScroll', this.handleMouseWheel);
     }
 
     // 手机触屏屏幕
-    document.addEventListener('touchstart', event => {
-      this.startY = event.touches[0].pageY;
-    });
-    const handleTouchEnd = utils.throttle(this.touchEnd, this, 500);
-    document.addEventListener('touchend', handleTouchEnd);
-    document.addEventListener('touchmove', event => {
-      event.preventDefault();
-    });
+    document.addEventListener('touchstart', this.handleTouchStart);
+    this.handleTouchEnd = utils.throttle(this.touchEnd, this, 500);
+    document.addEventListener('touchend', this.handleTouchEnd);
+    document.addEventListener('touchmove', this.handleTouchMove);
 
     // 窗口尺寸变化时重置位置
-    const handleNewPosition = utils.debounce(this.getNewPosition.bind(this), 200);
-    window.addEventListener('resize', handleNewPosition);
+    this.handleNewPosition = utils.debounce(this.getNewPosition.bind(this), 200);
+    window.addEventListener('resize', this.handleNewPosition);
+  }
+  // 移除事件
+  remove() {
+    // 鼠标滚轮监听，火狐鼠标滚动事件不同其他
+    this.handleMouseWheel = utils.debounce(this.scrollMouse.bind(this), 40, true);
+    if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
+      document.removeEventListener('mousewheel', this.handleMouseWheel);
+    } else {
+      document.removeEventListener('DOMMouseScroll', this.handleMouseWheel);
+    }
+
+    // 手机触屏屏幕
+    document.removeEventListener('touchstart', this.handleTouchStart);
+    this.handleTouchEnd = utils.throttle(this.touchEnd, this, 500);
+    document.removeEventListener('touchend', this.handleTouchEnd);
+    document.removeEventListener('touchmove', this.handleTouchMove);
+
+    // 窗口尺寸变化时重置位置
+    this.handleNewPosition = utils.debounce(this.getNewPosition.bind(this), 200);
+    window.removeEventListener('resize', this.handleNewPosition);
   }
 }
