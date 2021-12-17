@@ -98,7 +98,7 @@ const pureFullPage = new PureFullPage({
   definePages: addAnimation,
 });
 
-pureFullPage.init()
+pureFullPage.init();
 
 
 // 离开页面时移除事件
