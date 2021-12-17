@@ -93,10 +93,16 @@ new PureFullPage();
 When instantiating pureFullPage, an object is accepted as a parameter, which can control whether to display the right navigation (It often does not need the right navigation on mobile) and custom page animation. The sample code is as follows:
 
 ```js
-new PureFullPage({
+const pureFullPage = new PureFullPage({
   isShowNav: true,
   definePages: addAnimation,
 });
+
+pureFullPage.init();
+
+
+// 离开页面时移除事件
+// pureFullPage.remove()
 ```
 
 | param name    | type     | default value | definition                                                                                                                                                                                                       |
