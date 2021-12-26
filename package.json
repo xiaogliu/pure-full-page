@@ -6,7 +6,7 @@
     "full page scroll",
     "ES6"
   ],
-  "main": "./lib/pureFullPage.js",
+  "main": "./lib/pureFullPage.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "gulp watch",

@@ -168,3 +168,7 @@ npm run watch
 # 手动生成新的 dist 下面的文件
 npm run build
 ```
+
+4) 在 `./src` 文件夹下进行开发 
+
+会自动编译到 `./dist` (直接引入 js 文件，不使用 NPM/ES6 modular) 和 `./lib` (使用 NPM/ES6 modular)

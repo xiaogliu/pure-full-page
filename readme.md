@@ -166,3 +166,8 @@ npm run watch
 # Manually generate the files under the new dist
 npm run build
 ```
+
+4) Develop you code in `./src` file 
+
+Will auto compile file to `./dist`(used without NPM/ES6 modular) and `./lib` (used in NPM/ES6 modular)
+ 
